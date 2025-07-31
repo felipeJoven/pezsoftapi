@@ -1,10 +1,8 @@
 package com.api.infrastructure.especie.controller;
 
-import com.api.application.utils.Message;
 import com.api.domain.especie.model.Especie;
 import com.api.domain.especie.ports.in.EspecieService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,35 +20,30 @@ public class EspecieController {
     @GetMapping("")
     public ResponseEntity<?> obtenerEspecies(@RequestParam(required = false) String filtro) {
         List<Especie> especies = especieService.listarEspecies(filtro);
-        if (especies.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Message.MENSAJE_ERROR_VER + "especies!");
-        }
         return ResponseEntity.ok(especies);
     }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<?> obtenerEspecieId(@PathVariable Integer id) {
-        Optional<Especie> especie = especieService.listarEspeciePorId(id);
-        if (especie.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Message.MENSAJE_ERROR_ID + id);
-        }
-        return ResponseEntity.ok(especie);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerEspeciePorId(@PathVariable Integer id) {
+        Optional<Especie> especieId = especieService.listarEspeciePorId(id);
+        return ResponseEntity.ok(especieId);
     }
 
     @PostMapping("")
     public ResponseEntity<?> crearEspecie(@RequestBody Especie especie) {
-        return especieService.agregarEspecie(especie);
+        String nuevaEspecie = especieService.agregarEspecie(especie);
+        return ResponseEntity.ok(nuevaEspecie);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editarEspecie(@PathVariable Integer id, @RequestBody Especie especie) {
-        return especieService.actualizarEspecie(id, especie);
+        String especieActualizada = especieService.actualizarEspecie(id, especie);
+        return ResponseEntity.ok(especieActualizada);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> borrarEspecie(@PathVariable Integer id) {
-        return especieService.eliminarEspecie(id);
-    }*/
+        String eliminarEspecie = especieService.eliminarEspecie(id);
+        return ResponseEntity.ok(eliminarEspecie);
+    }
 }

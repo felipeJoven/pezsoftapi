@@ -1,23 +1,15 @@
-/*
 package com.api.domain.usuario.ports.out;
 
-import org.springframework.stereotype.Repository;
+import com.api.domain.usuario.model.Usuario;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface UsuarioRepository extends BaseRespository<Usuario, Integer> {
+public interface UsuarioRepository {
 
-    // Buscar un usuario mediante su nombre
-    Optional<Usuario> findByEmail(String email);
-
-    // Buscar un usuario mediante su username
-    Optional<Usuario> findByUsuario(String usuario);
-
-    // Verificar si un usuario existe en la BD
-    Boolean existsByEmail(String email);
-
-    // Encontrar usuario por username y rol
-    List<Usuario> findByRolName(String filtro);
-}*/
+//    List<Usuario> findByUsuario(String correo);
+    List<Usuario> findAll();
+    Optional<Usuario> findById(Integer id);
+//    Boolean existsByEmail(String email);
+//    List<Usuario> findByRolName(String filtro);
+}

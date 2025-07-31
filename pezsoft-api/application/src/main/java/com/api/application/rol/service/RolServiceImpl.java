@@ -1,30 +1,21 @@
-/*
 package com.api.application.rol.service;
 
-import com.peces.pezSoft.repository.RolRepository;
+import com.api.domain.rol.model.Rol;
 import com.api.domain.rol.ports.in.RolService;
-import com.peces.pezSoft.utils.Message;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.api.domain.rol.ports.out.RolRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RolServiceImpl implements RolService {
 
     private RolRepository rolRepository;
 
     @Override
-    public ResponseEntity<?> listarRoles() {
-        try {
-            List<Rol> roles = rolRepository.findAll();
-            return ResponseEntity.ok(roles);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
+    public List<Rol> listarRoles() {
+        return rolRepository.findAll();
     }
-}*/
+}

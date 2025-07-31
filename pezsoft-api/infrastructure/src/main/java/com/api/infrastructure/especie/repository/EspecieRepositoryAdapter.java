@@ -5,7 +5,6 @@ import com.api.domain.especie.ports.out.EspecieRepository;
 import com.api.infrastructure.especie.mapper.EspecieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +33,7 @@ public class EspecieRepositoryAdapter implements EspecieRepository {
                 .collect(Collectors.toList());
     }
 
-    /*@Override
+    @Override
     public Optional<Especie> findById(Integer id) {
         return repositoryJpa.findById(id).map(mapper::toDomain);
     }
@@ -52,5 +51,5 @@ public class EspecieRepositoryAdapter implements EspecieRepository {
     @Override
     public void delete(Especie especie) {
         repositoryJpa.delete(mapper.toEntity(especie));
-    }*/
+    }
 }

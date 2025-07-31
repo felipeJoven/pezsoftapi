@@ -19,7 +19,7 @@ import org.springframework.data.annotation.CreatedDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Base implements Serializable{
+public abstract class Base implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,5 +28,4 @@ public class Base implements Serializable{
     @Column(name = "fecha_creacion")
     @CreatedDate
     private LocalDate fechaCreacion;
-
 }

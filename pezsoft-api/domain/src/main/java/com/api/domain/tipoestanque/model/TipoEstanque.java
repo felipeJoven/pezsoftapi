@@ -1,4 +1,4 @@
-package com.api.domain.tipoproveedor.model;
+package com.api.domain.tipoestanque.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TipoProveedor {
+public class TipoEstanque {
 
     private Integer id;
-    private String name;
+    private String tipoEstanque;
     private LocalDate fechaCreacion;
 }

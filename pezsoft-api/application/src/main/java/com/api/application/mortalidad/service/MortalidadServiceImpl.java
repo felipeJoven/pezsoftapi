@@ -65,7 +65,7 @@ public class MortalidadServiceImpl implements MortalidadService {
                 return ResponseEntity.ok(optionalMortalidad);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Message.MENSAJE_ERROR_ID + id);
+                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -171,7 +171,7 @@ public class MortalidadServiceImpl implements MortalidadService {
                 return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ACTUALIZADO + "la mortalidad");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Message.MENSAJE_ERROR_ID + id);
+                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -198,7 +198,7 @@ public class MortalidadServiceImpl implements MortalidadService {
                 return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ELIMINADO + "esta mortalidad");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_ID + id);
+                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

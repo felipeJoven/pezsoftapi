@@ -1,13 +1,9 @@
-/*
 package com.api.domain.rol.ports.out;
 
-import org.springframework.stereotype.Repository;
+import com.api.domain.rol.model.Rol;
 
-import java.util.Optional;
+import java.util.List;
 
-@Repository
-public interface RolRepository extends BaseRespository<Rol, Integer>{
-
-    //Metodo para poder buscar un rol mediante su nombre
-    Optional<Rol> findByName(String name);
-}*/
+public interface RolRepository {
+    List<Rol> findAll();
+}

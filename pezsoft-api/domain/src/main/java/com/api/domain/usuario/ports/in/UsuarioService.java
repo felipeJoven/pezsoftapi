@@ -1,15 +1,17 @@
-/*
 package com.api.domain.usuario.ports.in;
 
-import com.peces.pezSoft.dtos.UsuarioDto;
-import org.springframework.http.ResponseEntity;
+import com.api.domain.usuario.model.Usuario;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface UsuarioService {
-    ResponseEntity<?> listarUsuarios(String filtro);
-    ResponseEntity<?> listarUsuarioPorId(Integer id);
-    ResponseEntity<?> listarPerfil();
-    ResponseEntity<?> agregarUsuario(UsuarioDto usuarioDto);
-    ResponseEntity<?> actualizarUsuario(Integer id, UsuarioDto usuarioDto);
-    ResponseEntity<?> actualizarPerfil(UsuarioDto usuarioDto);
-    ResponseEntity<?> eliminarUsuario(Integer id);
-}*/
+
+    List<Usuario> listarUsuarios(String filtro);
+    Optional<Usuario> listarUsuarioPorId(Integer id);
+//    String listarPerfil();
+//    String agregarUsuario(Usuario usuarioDto);
+//    String actualizarUsuario(Integer id, Usuario usuarioDto);
+//    String actualizarPerfil(Usuario usuarioDto);
+//    String eliminarUsuario(Integer id);
+}

@@ -1,8 +1,11 @@
-/*
 package com.api.domain.rol.ports.in;
 
-import org.springframework.http.ResponseEntity;
+
+import com.api.domain.rol.model.Rol;
+
+import java.util.List;
 
 public interface RolService {
-    ResponseEntity<?> listarRoles();
-}*/
+
+    List<Rol> listarRoles();
+}

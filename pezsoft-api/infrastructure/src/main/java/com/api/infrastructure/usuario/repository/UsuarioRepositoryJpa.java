@@ -1,25 +1,19 @@
-/*
 package com.api.infrastructure.usuario.repository;
 
 import com.api.domain.usuario.model.Usuario;
 import com.api.infrastructure.base.repository.BaseRespositoryJpa;
+import com.api.infrastructure.usuario.entity.UsuarioEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface UsuarioRepositoryJpa extends BaseRespositoryJpa<Usuario, Integer> {
+public interface UsuarioRepositoryJpa extends BaseRespositoryJpa<UsuarioEntity, Integer> {
 
-    // Buscar un usuario mediante su nombre
-    Optional<Usuario> findByEmail(String email);
+    boolean existsByCorreo(String correo);
 
-    // Buscar un usuario mediante su username
-    Optional<Usuario> findByUsuario(String usuario);
-
-    // Verificar si un usuario existe en la BD
-    Boolean existsByEmail(String email);
-
-    // Encontrar usuario por username y rol
-    List<Usuario> findByRolName(String filtro);
-}*/
+//    @Query("SELECT u FROM Usuario u WHERE " +
+//            "LOWER(u.usuario) LIKE LOWER(CONCAT('%', :filtro, '%'))")
+//    List<UsuarioEntity> findByUsuario(String filtro);
+}

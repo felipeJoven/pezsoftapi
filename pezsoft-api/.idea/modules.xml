@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/application/pezsoftapi.application.main.iml" filepath="$PROJECT_DIR$/.idea/modules/application/pezsoftapi.application.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/pezsoftapi.domain.main.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/pezsoftapi.domain.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/infrastructure/pezsoftapi.infrastructure.main.iml" filepath="$PROJECT_DIR$/.idea/modules/infrastructure/pezsoftapi.infrastructure.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pezsoftapi.main.iml" filepath="$PROJECT_DIR$/.idea/modules/pezsoftapi.main.iml" />
     </modules>
   </component>
 </project>

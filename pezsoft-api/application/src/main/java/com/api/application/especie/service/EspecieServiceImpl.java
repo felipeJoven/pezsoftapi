@@ -4,7 +4,9 @@ import com.api.domain.especie.model.Especie;
 import com.api.domain.especie.ports.in.EspecieService;
 import com.api.domain.especie.ports.out.EspecieRepository;
 import com.api.application.utils.Message;
-import lombok.AllArgsConstructor;
+import com.api.domain.exception.BadRequestException;
+import com.api.domain.exception.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,96 +14,76 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EspecieServiceImpl implements EspecieService {
 
-    private EspecieRepository especieRepository;
+    private final EspecieRepository especieRepository;
 
     @Override
     public List<Especie> listarEspecies(String filtro) {
-        List<Especie> especies;
-        if (filtro != null && !filtro.isEmpty()) {
-            especies = especieRepository.findByEspecie(filtro);
-        } else {
-            especies = especieRepository.findAll();
+
+        List<Especie> especies = (filtro != null && !filtro.isEmpty())
+                ? especieRepository.findByEspecie(filtro)
+                : especieRepository.findAll();
+
+        if (especies.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "especies!");
         }
+
         return especies;
     }
 
-    /*@Override
+    @Override
     public Optional<Especie> listarEspeciePorId(Integer id) {
-        try {
-            Optional<Especie> optionalEspecie = especieRepository.findById(id);
-            if (optionalEspecie.isPresent()) {
-                return ResponseEntity.ok(optionalEspecie);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_ID + id);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
+
+        Optional<Especie> especieId = especieRepository.findById(id);
+
+        if (especieId.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id);
         }
+
+        return especieId;
     }
 
     @Override
     public String agregarEspecie(Especie especie) {
-        try {
-            boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
-            if (existeEspecie) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(String.format(Message.MENSAJE_ERROR_EXISTE, "la especie"));
-            } else {
-                especie.setFechaCreacion(LocalDate.now());
-                especieRepository.save(especie);
-                return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(Message.MENSAJE_EXITOSO_GUARDADO + "una especie");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
+
+        boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
+
+        if (existeEspecie) {
+            throw new BadRequestException(Message.MENSAJE_ERROR_EXISTE, "la especie");
         }
+
+        especie.setFechaCreacion(LocalDate.now());
+        especieRepository.save(especie);
+        return Message.MENSAJE_EXITOSO_GUARDADO + "una especie";
+
     }
 
     @Override
     public String actualizarEspecie(Integer id, Especie especie) {
-        try {
-            boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
-            Optional<Especie> especieOptional = especieRepository.findById(id);
-            if (especieOptional.isPresent()) {
-                Especie especieActualizada = especieOptional.get();
-                if (!especie.getEspecie().equals(especieActualizada.getEspecie()) && existeEspecie) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(String.format(Message.MENSAJE_ERROR_EXISTE, "esta especie!"));
-                }
-                especieActualizada.setEspecie(especie.getEspecie());
-                especieRepository.save(especieActualizada);
-                return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ACTUALIZADO + "la especie");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_ID + id);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
+
+        Especie especieActualizada = especieRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+
+        boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
+
+        if (!especie.getEspecie().equals(especieActualizada.getEspecie()) && existeEspecie) {
+            throw new BadRequestException(Message.MENSAJE_ERROR_EXISTE, "esta especie");
         }
+
+        especieActualizada.setEspecie(especie.getEspecie());
+        especieRepository.save(especieActualizada);
+        return Message.MENSAJE_EXITOSO_ACTUALIZADO + "la especie";
     }
 
     @Override
     public String eliminarEspecie(Integer id) {
-        try {
-            Optional<Especie> optionalEspecie = especieRepository.findById(id);
-            if (optionalEspecie.isPresent()) {
-                Especie especie = optionalEspecie.get();
-                especieRepository.delete(especie);
-                return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ELIMINADO + "esta especie");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_ID + id);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
-    }*/
+
+        Especie especie = especieRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+
+        especieRepository.delete(especie);
+        return Message.MENSAJE_EXITOSO_ELIMINADO + "esta especie";
+    }
 }

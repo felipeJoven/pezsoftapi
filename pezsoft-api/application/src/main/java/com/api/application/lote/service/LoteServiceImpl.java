@@ -81,7 +81,7 @@ public class LoteServiceImpl implements LoteService {
                 return ResponseEntity.ok(loteDto);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Message.MENSAJE_ERROR_ID + id);
+                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -218,7 +218,7 @@ public class LoteServiceImpl implements LoteService {
                 return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ACTUALIZADO + "el lote");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_ID + id);
+                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -247,7 +247,7 @@ public class LoteServiceImpl implements LoteService {
                 return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ELIMINADO + "este lote");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_ID + id);
+                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -9,14 +9,13 @@ server:
 
 spring:
   datasource:
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost:1433;databaseName=PEZSOFT_DB;encrypt=true;trustServerCertificate=true
-    username: sa
-    password: 1234
+    driver-class-name: ${CLASS_NAME}
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     open-in-view: false
     database-platform: org.hibernate.dialect.SQLServerDialect

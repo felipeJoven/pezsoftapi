@@ -1,16 +1,15 @@
-/*
 package com.api.infrastructure.rol.controller;
 
+import com.api.domain.rol.model.Rol;
 import com.api.domain.rol.ports.in.RolService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("rol")
 @CrossOrigin("*")
 public class RolController {
@@ -19,6 +18,8 @@ public class RolController {
 
     @GetMapping("")
     public ResponseEntity<?> obtenerRoles() {
-        return rolService.listarRoles();
+        List<Rol> roles = rolService.listarRoles();
+        return ResponseEntity.ok(roles);
     }
-}*/
+
+}
