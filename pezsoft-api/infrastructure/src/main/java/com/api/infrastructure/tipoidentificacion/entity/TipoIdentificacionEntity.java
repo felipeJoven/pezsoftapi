@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tipo_identificacion")
 @Getter
 @Setter
 @AllArgsConstructor

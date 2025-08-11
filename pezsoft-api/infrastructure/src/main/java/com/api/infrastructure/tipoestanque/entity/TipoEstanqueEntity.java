@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tipo_estanque")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,5 +18,5 @@ public class TipoEstanqueEntity {
     private Integer id;
 
     @Column(nullable = false, name = "tipo_estanque")
-    private String name;
+    private String tipoEstanque;
 }

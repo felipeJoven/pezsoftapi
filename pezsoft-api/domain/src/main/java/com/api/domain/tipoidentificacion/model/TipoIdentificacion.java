@@ -14,6 +14,5 @@ import java.time.LocalDate;
 public class TipoIdentificacion {
 
     private Integer id;
-    private String name;
-    private LocalDate fechaCreacion;
+    private String tipoIdentificacion;
 }

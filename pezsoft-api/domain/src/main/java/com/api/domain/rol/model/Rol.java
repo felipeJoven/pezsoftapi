@@ -12,5 +12,5 @@ import lombok.Setter;
 public class Rol {
 
     private Integer id;
-    private String rol;
+    private String nombre;
 }

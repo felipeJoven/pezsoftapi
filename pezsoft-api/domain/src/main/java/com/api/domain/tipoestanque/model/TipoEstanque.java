@@ -15,5 +15,4 @@ public class TipoEstanque {
 
     private Integer id;
     private String tipoEstanque;
-    private LocalDate fechaCreacion;
 }

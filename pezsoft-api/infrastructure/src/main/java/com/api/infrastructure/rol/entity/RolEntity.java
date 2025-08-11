@@ -18,5 +18,5 @@ public class RolEntity {
     private Integer id;
 
     @Column(nullable = false)
-    private String rol;
+    private String nombre;
 }
