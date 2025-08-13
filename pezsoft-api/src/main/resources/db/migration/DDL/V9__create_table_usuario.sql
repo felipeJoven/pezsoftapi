@@ -1,0 +1,9 @@
+CREATE TABLE usuario (
+    id INT IDENTITY PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    usuario VARCHAR(50) NOT NULL UNIQUE,
+    correo VARCHAR(50) NOT NULL UNIQUE,
+    telefono VARCHAR(10) NOT NULL,
+    fecha_creacion DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE)
+);

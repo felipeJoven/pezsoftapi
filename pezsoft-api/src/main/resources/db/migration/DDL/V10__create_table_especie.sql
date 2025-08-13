@@ -1,0 +1,5 @@
+CREATE TABLE especie (
+    id INT IDENTITY PRIMARY KEY,
+    especie VARCHAR(50) NOT NULL UNIQUE,
+    fecha_creacion DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE)
+);
