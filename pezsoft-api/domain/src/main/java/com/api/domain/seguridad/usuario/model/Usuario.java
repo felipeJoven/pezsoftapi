@@ -19,4 +19,5 @@ public class Usuario {
 //    private String clave;
     private String telefono;
 //    private Integer rol;
+    private String fechaCreacion;
 }
