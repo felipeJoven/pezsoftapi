@@ -1,5 +1,7 @@
 package com.api.application.produccion.modulo.tipoestanque.service;
 
+import com.api.application.utils.Message;
+import com.api.domain.exception.NotFoundException;
 import com.api.domain.produccion.modulo.tipoestanque.model.TipoEstanque;
 import com.api.domain.produccion.modulo.tipoestanque.ports.in.TipoEstanqueService;
 import com.api.domain.produccion.modulo.tipoestanque.ports.out.TipoEstanqueRepository;
@@ -16,6 +18,13 @@ public class TipoEstanqueServiceImpl implements TipoEstanqueService {
 
     @Override
     public List<TipoEstanque> verTipos() {
-        return tipoEstanqueRepository.findAll();
+
+        List<TipoEstanque> tipos = tipoEstanqueRepository.findAll();
+
+        if (tipos.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "tipos de estanques!");
+        }
+
+        return tipos;
     }
 }

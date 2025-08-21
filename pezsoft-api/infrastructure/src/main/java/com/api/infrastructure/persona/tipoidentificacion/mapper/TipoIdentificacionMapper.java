@@ -1,7 +1,7 @@
 package com.api.infrastructure.persona.tipoidentificacion.mapper;
 
 import com.api.domain.persona.tipoidentificacion.model.TipoIdentificacion;
-import com.api.infrastructure.base.mapper.GlobalMapperConfig;
+import com.api.infrastructure.common.GlobalMapperConfig;
 import com.api.infrastructure.persona.tipoidentificacion.entity.TipoIdentificacionEntity;
 import org.mapstruct.Mapper;
 

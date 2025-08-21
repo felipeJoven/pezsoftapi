@@ -1,4 +1,4 @@
-package com.api.infrastructure.base.mapper;
+package com.api.infrastructure.common;
 
 import org.mapstruct.MapperConfig;
 import org.mapstruct.ReportingPolicy;

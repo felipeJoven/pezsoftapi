@@ -1,5 +1,7 @@
 package com.api.application.persona.proveedor.tipoproveedor.service;
 
+import com.api.application.utils.Message;
+import com.api.domain.exception.NotFoundException;
 import com.api.domain.persona.proveedor.tipoproveedor.model.TipoProveedor;
 import com.api.domain.persona.proveedor.tipoproveedor.ports.in.TipoProveedorService;
 import com.api.domain.persona.proveedor.tipoproveedor.ports.out.TipoProveedorRepository;
@@ -16,6 +18,13 @@ public class TipoProveedorServiceImpl implements TipoProveedorService {
 
     @Override
     public List<TipoProveedor> verTipos() {
-            return tipoProveedorRepository.findAll();
+
+        List<TipoProveedor> tipos = tipoProveedorRepository.findAll();
+
+        if (tipos.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "tipos de proveedores!");
+        }
+
+        return tipos;
     }
 }

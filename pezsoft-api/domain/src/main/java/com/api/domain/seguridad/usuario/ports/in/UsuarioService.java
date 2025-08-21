@@ -9,9 +9,9 @@ public interface UsuarioService {
 
     List<Usuario> listarUsuarios();
     Optional<Usuario> listarUsuarioPorId(Integer id);
+    Usuario agregarUsuario(Usuario usuario);
+    Usuario actualizarUsuario(Integer id, Usuario usuario);
+    void eliminarUsuario(Integer id);
 //    String listarPerfil();
-//    String agregarUsuario(Usuario usuarioDto);
-//    String actualizarUsuario(Integer id, Usuario usuarioDto);
 //    String actualizarPerfil(Usuario usuarioDto);
-//    String eliminarUsuario(Integer id);
 }

@@ -1,7 +1,7 @@
 package com.api.infrastructure.catalogo.especie.mapper;
 
 import com.api.domain.catalogo.especie.model.Especie;
-import com.api.infrastructure.base.mapper.GlobalMapperConfig;
+import com.api.infrastructure.common.GlobalMapperConfig;
 import com.api.infrastructure.catalogo.especie.entity.EspecieEntity;
 import org.mapstruct.Mapper;
 

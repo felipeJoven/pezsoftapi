@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,5 +21,5 @@ public class Usuario {
 //    private String clave;
     private String telefono;
 //    private Integer rol;
-    private String fechaCreacion;
+    private LocalDate fechaCreacion;
 }

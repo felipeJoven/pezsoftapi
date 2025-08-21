@@ -10,6 +10,8 @@ public interface UsuarioRepository {
 //    List<Usuario> findByUsuario(String correo);
     List<Usuario> findAll();
     Optional<Usuario> findById(Integer id);
-//    Boolean existsByEmail(String email);
+    Usuario save(Usuario usuario);
+    void delete(Usuario usuario);
+    boolean existsByEmail(String email);
 //    List<Usuario> findByRolName(String filtro);
 }

@@ -2,6 +2,7 @@ package com.api.infrastructure.catalogo.especie.repository;
 
 import com.api.domain.catalogo.especie.model.Especie;
 import com.api.domain.catalogo.especie.ports.out.EspecieRepository;
+import com.api.infrastructure.catalogo.especie.entity.EspecieEntity;
 import com.api.infrastructure.catalogo.especie.mapper.EspecieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -39,17 +40,20 @@ public class EspecieRepositoryAdapter implements EspecieRepository {
     }
 
     @Override
-    public boolean existsByEspecie(String nombre) {
-        return repositoryJpa.existsByEspecie(nombre);
-    }
-
-    @Override
-    public void save(Especie especie) {
-        repositoryJpa.save(mapper.toEntity(especie));
+    public Especie save(Especie especie) {
+        EspecieEntity entity = repositoryJpa.save(mapper.toEntity(especie));
+        EspecieEntity nuevaEspecie = repositoryJpa.save(entity);
+        return mapper.toDomain(nuevaEspecie);
     }
 
     @Override
     public void delete(Especie especie) {
         repositoryJpa.delete(mapper.toEntity(especie));
+    }
+
+
+    @Override
+    public boolean existsByEspecie(String especie) {
+        return repositoryJpa.existsByEspecie(especie);
     }
 }

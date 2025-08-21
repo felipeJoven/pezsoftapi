@@ -10,7 +10,7 @@ public interface EspecieRepository {
     List<Especie> findByEspecie(String filtro);
     List<Especie> findAll();
     Optional<Especie> findById(Integer id);
-    void save(Especie especie);
+    Especie save(Especie especie);
     void delete(Especie especie);
     boolean existsByEspecie(String especie);
 }

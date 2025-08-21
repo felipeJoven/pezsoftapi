@@ -1,5 +1,7 @@
 package com.api.application.persona.tipoidentificacion.service;
 
+import com.api.application.utils.Message;
+import com.api.domain.exception.NotFoundException;
 import com.api.domain.persona.tipoidentificacion.model.TipoIdentificacion;
 import com.api.domain.persona.tipoidentificacion.ports.in.TipoIdentificacionService;
 import com.api.domain.persona.tipoidentificacion.ports.out.TipoIdentificacionRepository;
@@ -16,6 +18,13 @@ public class TipoIdentificacionServiceImpl implements TipoIdentificacionService 
 
     @Override
     public List<TipoIdentificacion> verTipos() {
-            return tipoIdentificacionRepository.findAll();
+
+        List<TipoIdentificacion> tipos = tipoIdentificacionRepository.findAll();
+
+        if (tipos.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "tipos de identificaciones!");
+        }
+
+        return tipos;
     }
 }

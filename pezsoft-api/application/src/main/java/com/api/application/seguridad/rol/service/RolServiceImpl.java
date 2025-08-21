@@ -1,5 +1,7 @@
 package com.api.application.seguridad.rol.service;
 
+import com.api.application.utils.Message;
+import com.api.domain.exception.NotFoundException;
 import com.api.domain.seguridad.rol.model.Rol;
 import com.api.domain.seguridad.rol.ports.in.RolService;
 import com.api.domain.seguridad.rol.ports.out.RolRepository;
@@ -16,6 +18,13 @@ public class RolServiceImpl implements RolService {
 
     @Override
     public List<Rol> listarRoles() {
-        return rolRepository.findAll();
+
+        List<Rol> roles = rolRepository.findAll();
+
+        if (roles.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "roles!");
+        }
+        
+        return roles;
     }
 }

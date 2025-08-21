@@ -8,6 +8,7 @@ import com.api.domain.exception.BadRequestException;
 import com.api.domain.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,7 +47,7 @@ public class EspecieServiceImpl implements EspecieService {
     }
 
     @Override
-    public String agregarEspecie(Especie especie) {
+    public Especie agregarEspecie(Especie especie) {
 
         boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
 
@@ -55,13 +56,13 @@ public class EspecieServiceImpl implements EspecieService {
         }
 
         especie.setFechaCreacion(LocalDate.now());
-        especieRepository.save(especie);
-        return Message.MENSAJE_EXITOSO_GUARDADO + "una especie";
+        return especieRepository.save(especie);
 
     }
 
     @Override
-    public String actualizarEspecie(Integer id, Especie especie) {
+    @Transactional
+    public Especie actualizarEspecie(Integer id, Especie especie) {
 
         Especie especieActualizada = especieRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
@@ -73,17 +74,16 @@ public class EspecieServiceImpl implements EspecieService {
         }
 
         especieActualizada.setEspecie(especie.getEspecie());
-        especieRepository.save(especieActualizada);
-        return Message.MENSAJE_EXITOSO_ACTUALIZADO + "la especie";
+        return especieRepository.save(especieActualizada);
     }
 
     @Override
-    public String eliminarEspecie(Integer id) {
+    @Transactional
+    public void eliminarEspecie(Integer id) {
 
         Especie especie = especieRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
 
         especieRepository.delete(especie);
-        return Message.MENSAJE_EXITOSO_ELIMINADO + "esta especie";
     }
 }

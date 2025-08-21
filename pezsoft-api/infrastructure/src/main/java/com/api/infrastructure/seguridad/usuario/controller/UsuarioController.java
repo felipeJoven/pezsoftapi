@@ -1,8 +1,11 @@
 package com.api.infrastructure.seguridad.usuario.controller;
 
+import com.api.application.seguridad.usuario.dto.UsuarioDto;
 import com.api.domain.seguridad.usuario.model.Usuario;
 import com.api.domain.seguridad.usuario.ports.in.UsuarioService;
+import com.api.infrastructure.seguridad.usuario.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,7 @@ import java.util.Optional;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final UsuarioMapper usuarioMapper;
 
     @GetMapping("")
 //    @PreAuthorize("hasAuthority('Admin')")
@@ -31,31 +35,27 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioId);
     }
 
-//    @GetMapping("/perfil")
-//    public ResponseEntity<?> obtenerPerfil() {
-//        return usuarioService.listarPerfil();
-//    }
-//
-//    @PostMapping("")
+
+    @PostMapping("")
 //    @PreAuthorize("hasAuthority('Admin')")
-//    public ResponseEntity<?> agregarUsuario(@RequestBody UsuarioDto usuarioDto) {
-//        return usuarioService.agregarUsuario(usuarioDto);
-//    }
-//
-//    @PutMapping("/{id}")
+    public ResponseEntity<?> crearUsuario(@RequestBody UsuarioDto usuarioDto) {
+        Usuario usuario = usuarioMapper.dtoToDomain(usuarioDto);
+        Usuario nuevoUsuario = usuarioService.agregarUsuario(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
+    }
+
+    @PutMapping("/{id}")
 //    @PreAuthorize("hasAuthority('Admin')")
-//    public ResponseEntity<?> editarUsuario(@PathVariable Integer id, @RequestBody UsuarioDto usuarioDto) {
-//        return usuarioService.actualizarUsuario(id, usuarioDto);
-//    }
-//
-//    @PutMapping("/perfil")
-//    public ResponseEntity<?> actualizarPerfil(@RequestBody UsuarioDto usuarioDto) {
-//        return usuarioService.actualizarPerfil(usuarioDto);
-//    }
-//
-//    @DeleteMapping("/{id}")
+    public ResponseEntity<?> editarUsuario(@PathVariable Integer id, @RequestBody UsuarioDto usuarioDto) {
+        Usuario usuario = usuarioMapper.dtoToDomain(usuarioDto);
+        Usuario usuarioActualizado = usuarioService.actualizarUsuario(id, usuario);
+        return ResponseEntity.ok(usuarioActualizado);
+    }
+
+    @DeleteMapping("/{id}")
 //    @PreAuthorize(("hasAuthority('Admin')"))
-//    public ResponseEntity<?> borrarUsuario(@PathVariable Integer id) {
-//        return usuarioService.eliminarUsuario(id);
-//    }
+    public ResponseEntity<?> borrarUsuario(@PathVariable Integer id) {
+        usuarioService.eliminarUsuario(id);
+        return ResponseEntity.noContent().build();
+    }
 }

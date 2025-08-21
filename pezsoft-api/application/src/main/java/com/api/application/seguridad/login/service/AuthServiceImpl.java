@@ -82,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
                 usuario.setEmail(usuarioDto.getEmail());
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Message.MENSAJE_ERROR_EMAIL_VACIO);
+                        .body(Message.MENSAJE_ERROR_CORREO_VACIO);
             }
             usuario.setUsuario(usuarioDto.getUsuario());
             usuario.setPassword(passwordEncoder.encode(usuarioDto.getPassword()));
