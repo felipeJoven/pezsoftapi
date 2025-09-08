@@ -1,10 +1,10 @@
-package com.api.application.produccion.modulo.tipoestanque.service;
+package com.api.application.produccion.estanque.tipoestanque.service;
 
 import com.api.application.utils.Message;
 import com.api.domain.exception.NotFoundException;
-import com.api.domain.produccion.modulo.tipoestanque.model.TipoEstanque;
-import com.api.domain.produccion.modulo.tipoestanque.ports.in.TipoEstanqueService;
-import com.api.domain.produccion.modulo.tipoestanque.ports.out.TipoEstanqueRepository;
+import com.api.domain.produccion.estanque.tipoestanque.model.TipoEstanque;
+import com.api.domain.produccion.estanque.tipoestanque.ports.in.TipoEstanqueService;
+import com.api.domain.produccion.estanque.tipoestanque.ports.out.TipoEstanqueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

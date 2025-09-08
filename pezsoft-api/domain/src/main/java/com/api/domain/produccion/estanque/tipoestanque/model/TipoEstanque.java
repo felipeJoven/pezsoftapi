@@ -1,4 +1,4 @@
-package com.api.domain.produccion.modulo.tipoestanque.model;
+package com.api.domain.produccion.estanque.tipoestanque.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -109,7 +109,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public Usuario actualizarUsuario(Integer id, Usuario usuario) {
 
-        Usuario usuarioActualizado = usuarioRepository.findById(id).orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+        Usuario usuarioActualizado = usuarioRepository.findById(id).
+                orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
 
         UsuarioDto usuarioDto = new UsuarioDto();
 
@@ -153,7 +154,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional
     public void eliminarUsuario(Integer id) {
 
-        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
 
         usuarioRepository.delete(usuario);
     }

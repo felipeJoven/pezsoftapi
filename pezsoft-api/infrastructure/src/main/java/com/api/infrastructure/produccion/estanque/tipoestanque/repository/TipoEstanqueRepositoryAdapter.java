@@ -1,8 +1,8 @@
-package com.api.infrastructure.produccion.modulo.tipoestanque.repository;
+package com.api.infrastructure.produccion.estanque.tipoestanque.repository;
 
-import com.api.domain.produccion.modulo.tipoestanque.model.TipoEstanque;
-import com.api.domain.produccion.modulo.tipoestanque.ports.out.TipoEstanqueRepository;
-import com.api.infrastructure.produccion.modulo.tipoestanque.mapper.TipoEstanqueMapper;
+import com.api.domain.produccion.estanque.tipoestanque.model.TipoEstanque;
+import com.api.domain.produccion.estanque.tipoestanque.ports.out.TipoEstanqueRepository;
+import com.api.infrastructure.produccion.estanque.tipoestanque.mapper.TipoEstanqueMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

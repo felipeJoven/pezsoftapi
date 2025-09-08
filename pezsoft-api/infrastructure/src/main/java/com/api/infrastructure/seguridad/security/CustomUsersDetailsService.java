@@ -1,7 +1,10 @@
 /*
-package com.api.infrastructure.security;
+package com.api.infrastructure.seguridad.security;
 
-import com.api.infrastructure.repository.usuario.UsuarioRepository;
+import com.api.domain.seguridad.rol.model.Rol;
+import com.api.domain.seguridad.usuario.model.Usuario;
+import com.api.domain.seguridad.usuario.ports.out.UsuarioRepository;
+import com.api.infrastructure.seguridad.usuario.entity.UsuarioEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +28,7 @@ public class CustomUsersDetailsService implements UserDetailsService {
     public Collection<GrantedAuthority> mapToAuthorities(Rol rol){
         List<GrantedAuthority> authorities = new ArrayList<>();
         // Mapear los roles a autoridades
-        GrantedAuthority roleAuthorities = new SimpleGrantedAuthority(rol.getName());
+        GrantedAuthority roleAuthorities = new SimpleGrantedAuthority(rol.getNombre());
         // Agregar las autoridades de los roles a la lista final
         authorities.add(roleAuthorities);
         return authorities;
@@ -33,8 +36,10 @@ public class CustomUsersDetailsService implements UserDetailsService {
 
     //Método para traernos un usuario con todos sus datos por medio de sus username
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-        return new User(usuario.getEmail(), usuario.getPassword(), mapToAuthorities(usuario.getRol()));
+    public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
+//        UsuarioEntity usuario = usuarioRepo.findByUsuario(correo).orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+//        return new User(usuario.getUsuario(), usuario.getClave(), mapToAuthorities(usuario.getRol()));
+        return null;
     }
-}*/
+}
+*/

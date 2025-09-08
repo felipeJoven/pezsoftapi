@@ -1,6 +1,6 @@
-package com.api.infrastructure.produccion.modulo.tipoestanque.repository;
+package com.api.infrastructure.produccion.estanque.tipoestanque.repository;
 
-import com.api.infrastructure.produccion.modulo.tipoestanque.entity.TipoEstanqueEntity;
+import com.api.infrastructure.produccion.estanque.tipoestanque.entity.TipoEstanqueEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

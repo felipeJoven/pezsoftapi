@@ -1,5 +1,5 @@
 /*
-package com.api.infrastructure.security;
+package com.api.infrastructure.seguridad.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -46,16 +46,17 @@ public class SecurityConfig {
                 .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/usuario").hasAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/usuario/**").hasAuthority("Admin")
-                        .requestMatchers(HttpMethod.GET, "/usuario/perfil").hasAnyAuthority("Admin", "User")
-                        .requestMatchers(HttpMethod.POST, "/usuario").hasAuthority("Admin")
-                        .requestMatchers(HttpMethod.PUT, "/usuario/**").hasAuthority("Admin")
-                        .requestMatchers(HttpMethod.PUT, "/usuario/perfil").hasAnyAuthority("Admin", "User")
-                        .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasAuthority("Admin")
+                        .requestMatchers(HttpMethod.GET, "/usuario").hasAuthority("Administrador")
+                        .requestMatchers(HttpMethod.GET, "/usuario/**").hasAuthority("Administrador")
+                        .requestMatchers(HttpMethod.GET, "/usuario/perfil").hasAnyAuthority("Administrador", "Usuario")
+                        .requestMatchers(HttpMethod.POST, "/usuario").hasAuthority("Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/usuario/**").hasAuthority("Administrador")
+                        .requestMatchers(HttpMethod.PUT, "/usuario/perfil").hasAnyAuthority("Administrador", "Usuario")
+                        .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasAuthority("Administrador")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-}*/
+}
+*/

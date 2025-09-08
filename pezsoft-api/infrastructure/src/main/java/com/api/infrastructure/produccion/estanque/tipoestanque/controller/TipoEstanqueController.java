@@ -1,7 +1,7 @@
-package com.api.infrastructure.produccion.modulo.tipoestanque.controller;
+package com.api.infrastructure.produccion.estanque.tipoestanque.controller;
 
-import com.api.domain.produccion.modulo.tipoestanque.model.TipoEstanque;
-import com.api.domain.produccion.modulo.tipoestanque.ports.in.TipoEstanqueService;
+import com.api.domain.produccion.estanque.tipoestanque.model.TipoEstanque;
+import com.api.domain.produccion.estanque.tipoestanque.ports.in.TipoEstanqueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

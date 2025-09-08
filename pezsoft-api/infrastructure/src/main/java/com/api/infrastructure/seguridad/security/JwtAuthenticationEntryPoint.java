@@ -1,5 +1,5 @@
 /*
-package com.api.infrastructure.security;
+package com.api.infrastructure.seguridad.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,4 +18,5 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
 
     }
-}*/
+}
+*/

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 @Data
 public class LoteDto {
+
     private Integer id;
     private String lote;
     private int numeroPeces;
@@ -12,9 +13,9 @@ public class LoteDto {
     private LocalDate fechaSiembra;
     private Long diasCultivados;
     private int especieId;
-    private int unidadProductivaId;
+    private int estanqueId;
     private int proveedorId;
     private String especieEspecie;
-    private String unidadProductivaUnidadP;
+    private String estanqueEstanque;
     private String proveedorRazonSocial;
 }

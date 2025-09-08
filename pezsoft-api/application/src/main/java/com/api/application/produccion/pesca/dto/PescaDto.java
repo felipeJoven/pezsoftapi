@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class PescaDto {
+
     private Integer id;
     private LocalDate fechaCreacion;
     private int pecesPescados;

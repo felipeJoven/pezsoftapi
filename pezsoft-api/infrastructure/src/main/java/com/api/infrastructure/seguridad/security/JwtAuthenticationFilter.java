@@ -1,5 +1,5 @@
 /*
-package com.api.infrastructure.security;
+package com.api.infrastructure.seguridad.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -66,4 +66,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //Permite que la solicitud continue hacia el siguiente filtro en la cadena de filtro
         filterChain.doFilter(request, response);
     }
-}*/
+}
+*/

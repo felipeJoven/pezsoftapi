@@ -1,4 +1,4 @@
-package com.api.infrastructure.produccion.modulo.tipoestanque.entity;
+package com.api.infrastructure.produccion.estanque.tipoestanque.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

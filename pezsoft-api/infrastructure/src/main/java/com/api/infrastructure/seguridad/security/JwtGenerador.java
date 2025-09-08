@@ -1,5 +1,5 @@
 /*
-package com.api.infrastructure.security;
+package com.api.infrastructure.seguridad.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -54,5 +54,5 @@ public class JwtGenerador {
             throw new AuthenticationCredentialsNotFoundException("Jwt ha expirado o está incorrecto");
         }
     }
-
-}*/
+}
+*/
