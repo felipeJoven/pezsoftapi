@@ -7,7 +7,7 @@ import com.peces.pezSoft.model.Lote;
 import com.peces.pezSoft.repository.EspecieRepository;
 import com.peces.pezSoft.repository.LoteRepository;
 import com.peces.pezSoft.repository.ProveedorRepository;
-import com.peces.pezSoft.repository.ModuloRepository;
+import com.peces.pezSoft.repository.EstanqueRepository;
 import com.api.domain.lote.ports.in.LoteService;
 import com.peces.pezSoft.utils.Message;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,7 +31,7 @@ public class LoteServiceImpl implements LoteService {
 
     private LoteRepository loteRepository;
     private EspecieRepository especieRepository;
-    private ModuloRepository unidadProductivaRepository;
+    private EstanqueRepository estanqueRepository;
     private ProveedorRepository proveedorRepository;
     private ModelMapper modelMapper;
 
@@ -69,7 +69,7 @@ public class LoteServiceImpl implements LoteService {
 
     @Override
     public ResponseEntity<?> verLotePorId(Integer id) {
-        try {
+    
             Optional<Lote> loteOptional = loteRepository.findById(id);
             if (loteOptional.isPresent()) {
                 Lote lote = loteOptional.get();
@@ -83,16 +83,11 @@ public class LoteServiceImpl implements LoteService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
     }
 
     @Override
     public ResponseEntity<?> agregarLote(LoteDto loteDto) {
-        try {
-            // Verifica si existe el lote en la bd
+    
             boolean existeLote = loteRepository.existsByLote(loteDto.getLote());
             if (!existeLote) {
                 // Configurar ModelMapper para ignorar los campos que no deben cambiar
@@ -104,7 +99,7 @@ public class LoteServiceImpl implements LoteService {
                 typeMap.addMappings(mapper -> {
                     mapper.skip(Lote::setId);
                     mapper.skip(Lote::setEspecie);
-                    mapper.skip(Lote::setModulo);
+                    mapper.skip(Lote::setEstanque);
                     mapper.skip(Lote::setProveedor);
                 });
                 Lote lote = modelMapper.map(loteDto, Lote.class);
@@ -114,19 +109,19 @@ public class LoteServiceImpl implements LoteService {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body("La fecha de siembra no puede ser futura!");
                 }
-                // Asignarle valor a pecesIniciales
+                
                 lote.setPecesIniciales(loteDto.getNumeroPeces());
-                // Verificar que existan unidades productivas, especies y proveedores en la bd
+                
                 Especie especie = especieRepository.findById(loteDto.getEspecieId())
                         .orElseThrow(() -> new EntityNotFoundException("Especie no encontrada!"));
                 lote.setEspecie(especie);
-                Modulo unidadProductiva = unidadProductivaRepository.findById(loteDto.getModuloId())
+                Estanque estanque = estanqueRepository.findById(loteDto.getEstanqueId())
                         .orElseThrow(() -> new EntityNotFoundException("Unidad productiva no encontrada!"));
-                lote.setModulo(unidadProductiva);
-                // Cambiar el estado de la unidad productiva a ocupada
-                if (unidadProductiva.getEstado() == 0) {
-                    unidadProductiva.setEstado(1);
-                    unidadProductivaRepository.save(unidadProductiva);
+                lote.setEstanque(estanque);
+                
+                if (estanque.getEstado() == 0) {
+                    estanque.setEstado(1);
+                    estanqueRepository.save(estanque);
                 } else {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body("La unidad productiva no está disponible!");
@@ -141,16 +136,12 @@ public class LoteServiceImpl implements LoteService {
             } else {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(String.format(Message.MENSAJE_ERROR_EXISTE, "el lote"));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
+            }        
     }
 
     @Override
     public ResponseEntity<?> actualizarLote(Integer id, LoteDto loteDto) {
-        try {
+    
             Optional<Lote> loteOptional = loteRepository.findById(id);
             if (loteOptional.isPresent()) {
                 // Verifica si existe el lote en la bd
@@ -179,22 +170,22 @@ public class LoteServiceImpl implements LoteService {
                         .orElseThrow(() -> new EntityNotFoundException("Especie no encontrada!"));
                 lote.setEspecie(especieActualizada);
                 // Validar si es otra unidad productiva
-                if (loteDto.getModuloId() != lote.getModulo().getId()) {
-                    Modulo unidadProductivaActualizada = unidadProductivaRepository.findById(loteDto.getModuloId())
+                if (loteDto.getEstanqueId() != lote.getEstanque().getId()) {
+                    Estanque estanqueActualizada = estanqueRepository.findById(loteDto.getEstanqueId())
                             .orElseThrow(() -> new EntityNotFoundException("Unidad productiva no encontrada!"));
                     // Validar el estado de la unidad productiva
-                    if (unidadProductivaActualizada.getEstado() != 0) {
+                    if (estanqueActualizada.getEstado() != 0) {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body("La unidad productiva no está disponible!");
                     }
                     // Cambiar estado a la unidad productiva anterior
-                    Modulo unidadAnterior = lote.getModulo();
+                    Estanque unidadAnterior = lote.getEstanque();
                     unidadAnterior.setEstado(0);
-                    unidadProductivaRepository.save(unidadAnterior);
+                    estanqueRepository.save(unidadAnterior);
                     // Cambiar el estado de la unidad productiva a ocupada
-                    unidadProductivaActualizada.setEstado(1);
-                    unidadProductivaRepository.save(unidadProductivaActualizada);
-                    lote.setModulo(unidadProductivaActualizada);
+                    estanqueActualizada.setEstado(1);
+                    estanqueRepository.save(estanqueActualizada);
+                    lote.setEstanque(estanqueActualizada);
                 }
                 Proveedor proveedorActualizado = proveedorRepository.findById(loteDto.getProveedorId())
                         .orElseThrow(() -> new EntityNotFoundException("Proveedor no encontrado!"));
@@ -208,7 +199,7 @@ public class LoteServiceImpl implements LoteService {
                 typeMap.addMappings(mapper -> {
                     mapper.skip(Lote::setId);
                     mapper.skip(Lote::setEspecie);
-                    mapper.skip(Lote::setModulo);
+                    mapper.skip(Lote::setEstanque);
                     mapper.skip(Lote::setProveedor);
                     mapper.skip(Lote::setFechaCreacion);
                 });
@@ -220,15 +211,11 @@ public class LoteServiceImpl implements LoteService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
     }
 
     @Override
     public ResponseEntity<?> eliminarLote(Integer id) {
-        try {
+    
             Optional<Lote> loteOptional = loteRepository.findById(id);
             if (loteOptional.isPresent()) {
                 Lote lote = loteOptional.get();
@@ -237,11 +224,11 @@ public class LoteServiceImpl implements LoteService {
                             .body("El lote no se puede eliminar porque ya está en uso!");
                 }
                 // Cambiar el estado de la unidad productiva a disponible
-                Modulo unidadProductiva = unidadProductivaRepository.findById(lote.getModulo().getId())
+                Estanque estanque = estanqueRepository.findById(lote.getEstanque().getId())
                         .orElseThrow(() -> new EntityNotFoundException("Unidad productiva no encontrada!"));
-                if (unidadProductiva.getEstado() == 1) {
-                    unidadProductiva.setEstado(0);
-                    unidadProductivaRepository.save(unidadProductiva);
+                if (estanque.getEstado() == 1) {
+                    estanque.setEstado(0);
+                    estanqueRepository.save(estanque);
                 }
                 loteRepository.delete(lote);
                 return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ELIMINADO + "este lote");
@@ -249,9 +236,5 @@ public class LoteServiceImpl implements LoteService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
     }
 }*/

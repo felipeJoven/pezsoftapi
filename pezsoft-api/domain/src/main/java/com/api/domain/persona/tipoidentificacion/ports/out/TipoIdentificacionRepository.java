@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TipoIdentificacionRepository {
 
-    List<TipoIdentificacion> findAll();
+    List<TipoIdentificacion> buscarTodos();
 }

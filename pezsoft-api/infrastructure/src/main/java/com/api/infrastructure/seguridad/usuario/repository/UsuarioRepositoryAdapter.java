@@ -15,36 +15,36 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UsuarioRepositoryAdapter implements UsuarioRepository {
 
-    private final UsuarioRepositoryJpa repositoryJpa;
-    private final UsuarioMapper mapper;
+    private final UsuarioRepositoryJpa usuarioRepositoryJpa;
+    private final UsuarioMapper usuarioMapper;
 
     @Override
     public List<Usuario> findAll() {
-        return repositoryJpa.findAll()
+        return usuarioRepositoryJpa.findAll()
                 .stream()
-                .map(mapper::toDomain)
+                .map(usuarioMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Optional<Usuario> findById(Integer id) {
-        return repositoryJpa.findById(id).map(mapper::toDomain);
+        return usuarioRepositoryJpa.findById(id).map(usuarioMapper::toDomain);
     }
 
     @Override
     public Usuario save(Usuario usuario) {
-        UsuarioEntity entity = repositoryJpa.save(mapper.toEntity(usuario));
-        UsuarioEntity nuevoUsuario = repositoryJpa.save(entity);
-        return mapper.toDomain(nuevoUsuario);
+        UsuarioEntity entity = usuarioRepositoryJpa.save(usuarioMapper.toEntity(usuario));
+        UsuarioEntity nuevoUsuario = usuarioRepositoryJpa.save(entity);
+        return usuarioMapper.toDomain(nuevoUsuario);
     }
 
     @Override
     public void delete(Usuario usuario) {
-        repositoryJpa.delete(mapper.toEntity(usuario));
+        usuarioRepositoryJpa.delete(usuarioMapper.toEntity(usuario));
     }
 
     @Override
     public boolean existsByEmail(String correo) {
-        return repositoryJpa.existsByCorreo(correo);
+        return usuarioRepositoryJpa.existsByCorreo(correo);
     }
 }

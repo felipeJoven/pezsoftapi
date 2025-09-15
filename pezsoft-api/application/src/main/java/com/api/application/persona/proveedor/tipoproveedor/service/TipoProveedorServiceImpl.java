@@ -19,7 +19,7 @@ public class TipoProveedorServiceImpl implements TipoProveedorService {
     @Override
     public List<TipoProveedor> verTipos() {
 
-        List<TipoProveedor> tipos = tipoProveedorRepository.findAll();
+        List<TipoProveedor> tipos = tipoProveedorRepository.buscarTodos();
 
         if (tipos.isEmpty()) {
             throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "tipos de proveedores!");

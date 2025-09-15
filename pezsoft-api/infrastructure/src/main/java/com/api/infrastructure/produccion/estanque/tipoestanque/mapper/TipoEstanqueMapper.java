@@ -9,4 +9,15 @@ import org.mapstruct.Mapper;
 public interface TipoEstanqueMapper {
 
     TipoEstanque toDomain(TipoEstanqueEntity entity);
+
+    default TipoEstanque map(Integer id) {
+        if (id == null) return null;
+        TipoEstanque tipo = new TipoEstanque();
+        tipo.setId(id);
+        return tipo;
+    }
+
+    default Integer map(TipoEstanque tipo) {
+        return tipo != null ? tipo.getId() : null;
+    }
 }

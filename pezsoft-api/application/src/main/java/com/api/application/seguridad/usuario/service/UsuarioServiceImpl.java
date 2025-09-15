@@ -60,6 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario agregarUsuario(Usuario usuario) {
 
         UsuarioDto usuarioDto = new UsuarioDto();
+
         boolean existeCorreo = usuarioRepository.existsByEmail(usuarioDto.getCorreo());
 
 

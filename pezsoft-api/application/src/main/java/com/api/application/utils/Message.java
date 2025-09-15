@@ -4,7 +4,9 @@ public class Message {
     
     public static final String MENSAJE_ERROR_LISTAR = "No se encontraron ";
     public static final String MENSAJE_ERROR_LISTAR_ID = "No se encontró el Id: ";
+    public static final String MENSAJE_ERROR_OBTENER_ENTIDAD = "No se encontró %s!";
     public static final String MENSAJE_ERROR_EXISTE = "Ya existe %s en la base de datos!";
+    public static final String MENSAJE_ERROR_NO_ID = "No se generó el Id de la entidad ";
 
     public static final String MENSAJE_ERROR_CORREO_VACIO = "Debe ingresar un correo electrónico!";
     public static final String MENSAJE_ERROR_TELEFONO = "El número de teléfono debe tener exactamente 10 dígitos";

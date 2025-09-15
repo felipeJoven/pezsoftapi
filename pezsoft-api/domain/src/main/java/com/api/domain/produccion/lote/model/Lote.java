@@ -45,7 +45,7 @@ public class Lote extends Base {
     // Unidad productiva
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
-    private Modulo unidadProductiva;
+    private Estanque estanque;
 
     // Proveedor
     @ManyToOne(optional = false)

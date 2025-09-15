@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TipoIdentificacionRespositoryAdapter implements TipoIdentificacionRepository {
 
-    private final TipoIdentificacionRepositoryJpa repositoryJpa;
-    private final TipoIdentificacionMapper mapper;
+    private final TipoIdentificacionRepositoryJpa tipoIdentificacionRepositoryJpa;
+    private final TipoIdentificacionMapper tipoIdentificacionMapper;
 
 
     @Override
-    public List<TipoIdentificacion> findAll() {
-        return repositoryJpa.findAll()
+    public List<TipoIdentificacion> buscarTodos() {
+        return tipoIdentificacionRepositoryJpa.findAll()
                 .stream()
-                .map(mapper::toDomain)
+                .map(tipoIdentificacionMapper::toDomain)
                 .collect(Collectors.toList());
     }
 }

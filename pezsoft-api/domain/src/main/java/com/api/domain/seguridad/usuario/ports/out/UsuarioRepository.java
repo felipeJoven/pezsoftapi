@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface UsuarioRepository {
 
-//    List<Usuario> findByUsuario(String correo);
     List<Usuario> findAll();
     Optional<Usuario> findById(Integer id);
+//    List<Usuario> findByUsuario(String correo);
     Usuario save(Usuario usuario);
     void delete(Usuario usuario);
     boolean existsByEmail(String email);

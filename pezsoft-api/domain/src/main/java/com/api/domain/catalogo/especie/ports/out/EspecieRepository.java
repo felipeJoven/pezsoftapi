@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface EspecieRepository {
 
-    List<Especie> findByEspecie(String filtro);
     List<Especie> findAll();
     Optional<Especie> findById(Integer id);
+    List<Especie> findByFilter(String filtro);
     Especie save(Especie especie);
     void delete(Especie especie);
     boolean existsByEspecie(String especie);

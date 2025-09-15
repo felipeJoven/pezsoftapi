@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TipoProveedorRepositoryAdapter implements TipoProveedorRepository {
 
-    private final TipoProveedorRepositoryJpa repositoryJpa;
-    private final TipoProveedorMapper mapper;
+    private final TipoProveedorRepositoryJpa tipoProveedorRepositoryJpa;
+    private final TipoProveedorMapper tipoProveedorMapper;
 
     @Override
-    public List<TipoProveedor> findAll() {
-        return repositoryJpa.findAll()
+    public List<TipoProveedor> buscarTodos() {
+        return tipoProveedorRepositoryJpa.findAll()
                 .stream()
-                .map(mapper::toDomain)
+                .map(tipoProveedorMapper::toDomain)
                 .collect(Collectors.toList());
     }
 }

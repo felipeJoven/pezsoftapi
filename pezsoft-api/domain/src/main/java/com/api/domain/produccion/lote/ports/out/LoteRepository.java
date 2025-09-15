@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface LoteRepository extends BaseRespository<Lote, Integer> {
 
-    // Verificar si existe un lote con la misma unidad productiva
     Boolean existsByLote(String lote);
 
     // Encontrar una lista de lotes por nombre y fecha de siembra

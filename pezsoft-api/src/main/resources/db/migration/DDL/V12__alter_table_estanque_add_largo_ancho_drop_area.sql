@@ -1,0 +1,6 @@
+ALTER TABLE estanque
+ADD largo DECIMAL(6,2) NOT NULL DEFAULT 0,
+    ancho DECIMAL(6,2) NOT NULL DEFAULT 0;
+
+ ALTER TABLE estanque
+ DROP COLUMN area;

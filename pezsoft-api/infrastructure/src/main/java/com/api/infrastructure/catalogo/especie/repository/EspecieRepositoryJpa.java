@@ -11,9 +11,9 @@ import java.util.List;
 @Repository
 public interface EspecieRepositoryJpa extends BaseRespositoryJpa<EspecieEntity, Integer> {
 
-    boolean existsByEspecie(String especie);
-
     @Query("SELECT e FROM especie e WHERE " +
             "LOWER(e.especie) LIKE LOWER(CONCAT('%', :filtro, '%'))")
     List<EspecieEntity> findByEspecie(@Param("filtro") String filtro);
+
+    boolean existsByEspecie(String especie);
 }

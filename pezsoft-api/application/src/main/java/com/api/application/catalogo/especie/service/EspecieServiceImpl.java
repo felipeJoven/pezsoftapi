@@ -24,7 +24,7 @@ public class EspecieServiceImpl implements EspecieService {
     public List<Especie> listarEspecies(String filtro) {
 
         List<Especie> especies = (filtro != null && !filtro.isEmpty())
-                ? especieRepository.findByEspecie(filtro)
+                ? especieRepository.findByFilter(filtro)
                 : especieRepository.findAll();
 
         if (especies.isEmpty()) {

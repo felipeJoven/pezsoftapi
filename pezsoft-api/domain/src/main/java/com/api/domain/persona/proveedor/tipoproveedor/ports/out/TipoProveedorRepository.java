@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TipoProveedorRepository {
 
-    List<TipoProveedor> findAll();
+    List<TipoProveedor> buscarTodos();
 }
