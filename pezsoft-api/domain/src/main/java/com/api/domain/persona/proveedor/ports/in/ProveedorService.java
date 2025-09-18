@@ -1,13 +1,15 @@
-/*
-package com.api.domain.proveedor.ports.in;
+package com.api.domain.persona.proveedor.ports.in;
 
-import com.peces.pezSoft.dtos.ProveedorDto;
-import org.springframework.http.ResponseEntity;
+import com.api.domain.persona.proveedor.model.Proveedor;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ProveedorService {
-    ResponseEntity<?> verProveedores(String filtro);
-    ResponseEntity<?> verProveedorPorId(Integer id);
-    ResponseEntity<?> agregarProveedor(ProveedorDto proveedor);
-    ResponseEntity<?> actualizarProveedor(Integer id, ProveedorDto proveedor);
-    ResponseEntity<?> eliminarProveedor(Integer id);
-}*/
+
+    List<Proveedor> listarProveedores(String filtro);
+    Optional<Proveedor> listarProveedorPorId(Integer id);
+    Proveedor agregarProveedor(Proveedor proveedor);
+    Proveedor actualizarProveedor(Integer id, Proveedor proveedor);
+    void eliminarProveedor(Integer id);
+}

@@ -16,5 +16,6 @@ public class EstanqueResponseDto {
     private double area;
     private double profundidad;
     private boolean estado;
+    private Integer tipoEstanqueId;
     private String tipoEstanque;
 }

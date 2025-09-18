@@ -1,21 +1,17 @@
-/*
-package com.api.domain.proveedor.ports.out;
+package com.api.domain.persona.proveedor.ports.out;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import com.api.domain.persona.proveedor.model.Proveedor;
 
 import java.util.List;
+import java.util.Optional;
 
-@Repository
-public interface ProveedorRepository extends BaseRespository<Proveedor, Integer> {
+public interface ProveedorRepository {
 
-    // Verifica si existe un proveedor en la BD
-    Boolean existsByNumeroIdentificacion(Long numero);
-
-    // Encontrar proveedor por razon social y número de identificación
-    @Query("SELECT p FROM Proveedor p WHERE " +
-            "LOWER(p.razonSocial) LIKE LOWER(CONCAT('%', :filtro, '%')) OR " +
-            "CAST(p.numeroIdentificacion AS STRING) LIKE CONCAT('%', :filtro, '%')")
-    List<Proveedor> findByRazonSocialAndNumeroIdentificacion(@Param("filtro") String filtro);
-}*/
+    List<Proveedor> findAll();
+    Optional<Proveedor> findById(Integer id);
+    List<Proveedor> findByFilter(String filtro);
+    Proveedor save(Proveedor proveedor);
+    void delete(Proveedor proveedor);
+    boolean existeRazonSocial(String razonSocial);
+    boolean existeNumeroIdentificacion(String numeroIdentificacion);
+}

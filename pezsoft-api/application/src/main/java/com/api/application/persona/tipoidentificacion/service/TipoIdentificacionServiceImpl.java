@@ -19,7 +19,7 @@ public class TipoIdentificacionServiceImpl implements TipoIdentificacionService 
     @Override
     public List<TipoIdentificacion> verTipos() {
 
-        List<TipoIdentificacion> tipos = tipoIdentificacionRepository.buscarTodos();
+        List<TipoIdentificacion> tipos = tipoIdentificacionRepository.findAll();
 
         if (tipos.isEmpty()) {
             throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "tipos de identificaciones!");

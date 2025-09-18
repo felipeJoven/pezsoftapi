@@ -1,11 +1,18 @@
-/*
-package com.api.infrastructure.proveedor.controller;
+package com.api.infrastructure.persona.proveedor.controller;
 
-import com.peces.pezSoft.dtos.ProveedorDto;
-import com.api.domain.proveedor.ports.in.ProveedorService;
+import com.api.application.persona.proveedor.dto.ProveedorRequestDto;
+import com.api.application.persona.proveedor.dto.ProveedorResponseDto;
+import com.api.domain.persona.proveedor.model.Proveedor;
+import com.api.domain.persona.proveedor.ports.in.ProveedorService;
+import com.api.infrastructure.persona.proveedor.mapper.ProveedorMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -13,30 +20,50 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins="*")
 public class ProveedorController {
 
-    private ProveedorService proveedorService;
+    private final ProveedorService proveedorService;
+    private final ProveedorMapper proveedorMapper;
 
     @GetMapping("")
     public ResponseEntity<?> obtenerProveedores(@RequestParam(required = false) String filtro) {
-        return proveedorService.verProveedores(filtro);
+
+        List<Proveedor> proveedores = proveedorService.listarProveedores(filtro);
+
+        return ResponseEntity.ok(proveedores);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerProveedorPorId(@PathVariable Integer id) {
-        return proveedorService.verProveedorPorId(id);
+
+        Optional<Proveedor> proveedorId = proveedorService.listarProveedorPorId(id);
+
+        return ResponseEntity.ok(proveedorId);
     }
 
     @PostMapping("")
-    public ResponseEntity<?> crearProveedor(@RequestBody ProveedorDto proveedorDto) {
-        return proveedorService.agregarProveedor(proveedorDto);
+    public ResponseEntity<?> crearProveedor(@RequestBody ProveedorRequestDto requestDto) {
+
+        Proveedor proveedor = proveedorMapper.requestToDomain(requestDto);
+        Proveedor proveedorNuevo = proveedorService.agregarProveedor(proveedor);
+
+        ProveedorResponseDto responseDto = proveedorMapper.domainToResponse(proveedorNuevo);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editarProveedor(@PathVariable Integer id, @RequestBody ProveedorDto proveedorDto) {
-        return proveedorService.actualizarProveedor(id, proveedorDto);
+    public ResponseEntity<?> editarProveedor(@PathVariable Integer id, @RequestBody ProveedorRequestDto requestDto) {
+
+        Proveedor proveedor = proveedorMapper.requestToDomain(requestDto);
+        Proveedor proveedorActualizado = proveedorService.actualizarProveedor(id, proveedor);
+
+        ProveedorResponseDto responseDto = proveedorMapper.domainToResponse(proveedorActualizado);
+
+        return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> borrarProveedor(@PathVariable Integer id) {
-        return proveedorService.eliminarProveedor(id);
+        proveedorService.eliminarProveedor(id);
+        return ResponseEntity.noContent().build();
     }
-}*/
+}

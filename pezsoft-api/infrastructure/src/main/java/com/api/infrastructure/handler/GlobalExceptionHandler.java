@@ -1,6 +1,7 @@
 package com.api.infrastructure.handler;
 
 import com.api.domain.exception.BadRequestException;
+import com.api.domain.exception.ConflictException;
 import com.api.domain.exception.NotFoundException;
 import com.api.domain.exception.PersistenceException;
 import org.slf4j.Logger;
@@ -28,6 +29,12 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<?> handleConflict(ConflictException e, WebRequest request) {
+        log.error("Conflicto en el servicio: ", e);
+        return buildResponse(e.getMessage(), HttpStatus.CONFLICT, request);
+    }
+
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> handleBadRequest(BadRequestException e, WebRequest request) {
         log.error("Solicitud incorrecta: ", e);
@@ -35,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException e, WebRequest request) {
+    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException e, WebRequest request) {
         log.error("Erro de validación: ", e);
 
         Map<String, String> errores = new HashMap<>();

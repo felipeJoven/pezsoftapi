@@ -66,16 +66,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         String correo = usuarioDto.getCorreo();
         if (correo.isEmpty()) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO_VACIO);
+//            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO_VACIO);
         }
 
         if (existeCorreo) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO);
+//            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO);
         }
 
         String telefono = String.valueOf(usuarioDto.getTelefono());
         if (telefono.length() != 10) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_TELEFONO);
+//            throw new BadRequestException(Message.MENSAJE_ERROR_TELEFONO);
         }
 
 //            if (passwordsEqual(usuarioDto.getPassword(), usuarioDto.getConfirmPassword())) {
@@ -119,17 +119,17 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         String correo = usuarioDto.getCorreo();
         if (correo.isEmpty()) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO_VACIO);
+//            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO_VACIO);
         }
 
         if (!usuarioActualizado.getCorreo().equals(usuario.getCorreo()) && existeCorreo) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO);
+//            throw new BadRequestException(Message.MENSAJE_ERROR_CORREO);
         }
 
         String telefono = String.valueOf(usuarioDto.getTelefono());
 
         if (!telefono.equals(usuario.getTelefono()) && telefono.length() != 10) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_TELEFONO);
+//            throw new BadRequestException(Message.MENSAJE_ERROR_TELEFONO);
         }
 
 //        if (passwordsEqual(usuarioDto.getPassword(), usuarioDto.getConfirmPassword())) {

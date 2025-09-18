@@ -1,7 +1,7 @@
 package com.api.application.produccion.estanque.service;
 
 import com.api.application.utils.Message;
-import com.api.domain.exception.BadRequestException;
+import com.api.domain.exception.ConflictException;
 import com.api.domain.exception.NotFoundException;
 import com.api.domain.exception.PersistenceException;
 import com.api.domain.produccion.estanque.model.Estanque;
@@ -43,6 +43,7 @@ public class EstanqueServiceImpl implements EstanqueService {
     public Optional<Estanque> listarEstanquePorId(Integer id) {
 
         Optional<Estanque> estanqueId = estanqueRepository.findById(id);
+
         if (estanqueId.isEmpty()) {
             throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id);
         }
@@ -58,14 +59,14 @@ public class EstanqueServiceImpl implements EstanqueService {
         boolean existeCoordenadas = estanqueRepository.existenCoordenadas(estanque.getCoordenadas());
 
         if (existeEstanque && existeCoordenadas) {
-            throw new BadRequestException("El estanque y las coordenadas no estan disponibles!");
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "el estanque y las coordenadas");
         } else if (existeEstanque) {
-            throw new BadRequestException(String.format(Message.MENSAJE_ERROR_EXISTE, "este estanque"));
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "este estanque");
         } else if (existeCoordenadas) {
-            throw new BadRequestException(String.format(Message.MENSAJE_ERROR_EXISTE, "estas coordenadas"));
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "estas coordenadas");
         }
 
-        TipoEstanque tipoEstanque = tipoEstanqueRepository.buscarPorId(estanque.getTipoEstanque().getId())
+        TipoEstanque tipoEstanque = tipoEstanqueRepository.findById(estanque.getTipoEstanque().getId())
                 .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, " tipo de estanque"));
 
         estanque.setEstado(false);
@@ -95,14 +96,14 @@ public class EstanqueServiceImpl implements EstanqueService {
                 existeEstanque && !estanque.getEstanque().equals(actualizarEstanque.getEstanque()) &&
                         existeCoordenadas && !estanque.getCoordenadas().equals(actualizarEstanque.getCoordenadas())
         ) {
-            throw new BadRequestException("El estanque y las coordenadas no estan disponibles!");
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "el estanque y las coordenadas");
         } else if (!estanque.getEstanque().equals(actualizarEstanque.getEstanque()) && existeEstanque) {
-            throw new BadRequestException(String.format(Message.MENSAJE_ERROR_EXISTE, "este estanque"));
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "este estanque");
         } else if (!estanque.getCoordenadas().equals(actualizarEstanque.getCoordenadas()) && existeCoordenadas) {
-            throw new BadRequestException(String.format(Message.MENSAJE_ERROR_EXISTE, "estas coordenadas"));
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "estas coordenadas");
         }
 
-        TipoEstanque tipoEstanque = tipoEstanqueRepository.buscarPorId(estanque.getTipoEstanque().getId())
+        TipoEstanque tipoEstanque = tipoEstanqueRepository.findById(estanque.getTipoEstanque().getId())
                         .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, "tipo de estanque"));
 
         estanque.setTipoEstanque(tipoEstanque);

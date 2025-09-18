@@ -20,6 +20,12 @@ public interface EstanqueMapper {
     @Mapping(target = "tipoEstanque.id", source = "tipoEstanqueId")
     Estanque requestToDomain(EstanqueRequestDto dto);
 
+    @Mapping(target = "tipoEstanqueId", source = "tipoEstanque.id")
     @Mapping(target = "tipoEstanque", source = "tipoEstanque.tipoEstanque")
+    @Mapping(target = "area", expression = "java(roundArea(domain.getArea()))")
     EstanqueResponseDto domainToResponse(Estanque domain);
+
+    default double roundArea(double area) {
+        return Math.round(area * 100.0) / 100.0;
+    }
 }

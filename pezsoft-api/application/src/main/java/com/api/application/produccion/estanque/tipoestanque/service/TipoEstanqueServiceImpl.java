@@ -19,7 +19,7 @@ public class TipoEstanqueServiceImpl implements TipoEstanqueService {
     @Override
     public List<TipoEstanque> verTipos() {
 
-        List<TipoEstanque> tipos = tipoEstanqueRepository.buscarTodos();
+        List<TipoEstanque> tipos = tipoEstanqueRepository.findAll();
 
         if (tipos.isEmpty()) {
             throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "tipos de estanques!");

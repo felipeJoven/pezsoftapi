@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -17,10 +18,15 @@ public class TipoProveedorRepositoryAdapter implements TipoProveedorRepository {
     private final TipoProveedorMapper tipoProveedorMapper;
 
     @Override
-    public List<TipoProveedor> buscarTodos() {
+    public List<TipoProveedor> findAll() {
         return tipoProveedorRepositoryJpa.findAll()
                 .stream()
                 .map(tipoProveedorMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<TipoProveedor> findById(Integer id) {
+        return tipoProveedorRepositoryJpa.findById(id).map(tipoProveedorMapper::toDomain);
     }
 }

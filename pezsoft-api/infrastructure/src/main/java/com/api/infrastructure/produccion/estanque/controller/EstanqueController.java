@@ -48,9 +48,9 @@ public class EstanqueController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> crearEstanque(@Valid @RequestBody EstanqueRequestDto estanqueDto) {
+    public ResponseEntity<?> crearEstanque(@Valid @RequestBody EstanqueRequestDto requestDto) {
 
-        Estanque estanque = estanqueMapper.requestToDomain(estanqueDto);
+        Estanque estanque = estanqueMapper.requestToDomain(requestDto);
         Estanque estanqueNuevo = estanqueService.agregarEstanque(estanque);
 
         EstanqueResponseDto responseDto = estanqueMapper.domainToResponse(estanqueNuevo);
@@ -59,9 +59,9 @@ public class EstanqueController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editarEstanque(@PathVariable Integer id, @Valid @RequestBody EstanqueRequestDto estanqueDto) {
+    public ResponseEntity<?> editarEstanque(@PathVariable Integer id, @Valid @RequestBody EstanqueRequestDto requestDto) {
 
-        Estanque estanque = estanqueMapper.requestToDomain(estanqueDto);
+        Estanque estanque = estanqueMapper.requestToDomain(requestDto);
         Estanque estanqueActualizado = estanqueService.actualizarEstanque(id, estanque);
 
         EstanqueResponseDto responseDto = estanqueMapper.domainToResponse(estanqueActualizado);

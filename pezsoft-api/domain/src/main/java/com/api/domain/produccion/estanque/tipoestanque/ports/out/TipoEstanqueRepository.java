@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface TipoEstanqueRepository {
 
-    List<TipoEstanque> buscarTodos();
-    Optional<TipoEstanque> buscarPorId(Integer id);
+    List<TipoEstanque> findAll();
+    Optional<TipoEstanque> findById(Integer id);
 }

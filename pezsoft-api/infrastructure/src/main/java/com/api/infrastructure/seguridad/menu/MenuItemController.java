@@ -19,6 +19,7 @@ public class MenuItemController {
                 new MenuItem("Usuario", "Integrantes", "/seguridad/usuario"),
                 new MenuItem("Catálogo", "Especie", "/catalogo/especie"),
                 new MenuItem("Persona", "Proveedor", "/persona/proveedor"),
+                new MenuItem("Producción", "Estanque", "/produccion/estanque"),
                 new MenuItem("Producción", "Lote", "/produccion/lote")
         );
     }
@@ -28,6 +29,7 @@ public class MenuItemController {
         return List.of(
                 new MenuItem("Catálogo", "Especie", "/catalogo/especie"),
                 new MenuItem("Persona", "Proveedor", "/persona/proveedor"),
+                new MenuItem("Producción", "Estanque", "/produccion/estanque"),
                 new MenuItem("Producción", "Lote", "/produccion/lote")
         );
     }

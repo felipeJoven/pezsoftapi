@@ -43,7 +43,6 @@ public class EstanqueRepositoryAdapter implements EstanqueRepository {
     public Estanque save(Estanque estanque) {
         EstanqueEntity entity = estanqueMapper.toEntity(estanque);
         EstanqueEntity nuevoEstanque = estanqueRepositoryJpa.save(entity);
-
         return estanqueMapper.toDomain(nuevoEstanque);
     }
 

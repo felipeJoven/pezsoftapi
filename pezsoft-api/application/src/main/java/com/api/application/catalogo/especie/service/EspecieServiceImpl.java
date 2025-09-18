@@ -5,6 +5,7 @@ import com.api.domain.catalogo.especie.ports.in.EspecieService;
 import com.api.domain.catalogo.especie.ports.out.EspecieRepository;
 import com.api.application.utils.Message;
 import com.api.domain.exception.BadRequestException;
+import com.api.domain.exception.ConflictException;
 import com.api.domain.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class EspecieServiceImpl implements EspecieService {
         boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
 
         if (existeEspecie) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_EXISTE, "la especie");
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "la especie");
         }
 
         especie.setFechaCreacion(LocalDate.now());
@@ -70,7 +71,7 @@ public class EspecieServiceImpl implements EspecieService {
         boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
 
         if (!especie.getEspecie().equals(especieActualizada.getEspecie()) && existeEspecie) {
-            throw new BadRequestException(Message.MENSAJE_ERROR_EXISTE, "esta especie");
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "esta especie");
         }
 
         especieActualizada.setEspecie(especie.getEspecie());

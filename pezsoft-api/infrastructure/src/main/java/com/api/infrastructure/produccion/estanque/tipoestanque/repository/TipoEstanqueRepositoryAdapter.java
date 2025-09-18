@@ -15,19 +15,18 @@ import java.util.stream.Collectors;
 public class TipoEstanqueRepositoryAdapter implements TipoEstanqueRepository {
 
     private final TipoEstanqueRepositoryJpa tipoEstanqueRepositoryJpa;
-    private final TipoEstanqueMapper mapper;
+    private final TipoEstanqueMapper tipoEstanqueMapper;
 
     @Override
-    public List<TipoEstanque> buscarTodos() {
+    public List<TipoEstanque> findAll() {
         return tipoEstanqueRepositoryJpa.findAll()
                 .stream()
-                .map(mapper::toDomain)
+                .map(tipoEstanqueMapper::toDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<TipoEstanque> buscarPorId(Integer id) {
-        return tipoEstanqueRepositoryJpa.findById(id).map(mapper::toDomain);
-
+    public Optional<TipoEstanque> findById(Integer id) {
+        return tipoEstanqueRepositoryJpa.findById(id).map(tipoEstanqueMapper::toDomain);
     }
 }

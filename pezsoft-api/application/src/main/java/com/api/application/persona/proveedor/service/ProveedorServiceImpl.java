@@ -1,186 +1,151 @@
-/*
-package com.api.application.proveedor.service;
+package com.api.application.persona.proveedor.service;
 
-import com.peces.pezSoft.dtos.ProveedorDto;
-import com.peces.pezSoft.repository.ProveedorRepository;
-import com.peces.pezSoft.repository.TipoIdentificacionRepository;
-import com.peces.pezSoft.repository.TipoProveedorRepository;
-import com.api.domain.proveedor.ports.in.ProveedorService;
-import com.peces.pezSoft.utils.Message;
-import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
-import org.modelmapper.Conditions;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.api.application.utils.Message;
+import com.api.domain.exception.ConflictException;
+import com.api.domain.exception.NotFoundException;
+import com.api.domain.exception.PersistenceException;
+import com.api.domain.persona.proveedor.model.Proveedor;
+import com.api.domain.persona.proveedor.ports.in.ProveedorService;
+import com.api.domain.persona.proveedor.ports.out.ProveedorRepository;
+import com.api.domain.persona.proveedor.tipoproveedor.model.TipoProveedor;
+import com.api.domain.persona.proveedor.tipoproveedor.ports.out.TipoProveedorRepository;
+import com.api.domain.persona.tipoidentificacion.model.TipoIdentificacion;
+import com.api.domain.persona.tipoidentificacion.ports.out.TipoIdentificacionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProveedorServiceImpl implements ProveedorService {
 
-    private ProveedorRepository proveedorRepository;
-    private TipoIdentificacionRepository tipoIdentificacionRepository;
-    private TipoProveedorRepository tipoProveedorRepository;
-    private ModelMapper modelMapper;
+    private final ProveedorRepository proveedorRepository;
+    private final TipoIdentificacionRepository tipoIdentificacionRepository;
+    private final TipoProveedorRepository tipoProveedorRepository;
 
     @Override
-    public ResponseEntity<?> verProveedores(String filtro) {
-        try {
-            List<Proveedor> proveedores;
-            if (filtro != null && !filtro.isEmpty()) {
-                proveedores = proveedorRepository.findByRazonSocialAndNumeroIdentificacion(filtro);
-            } else {
-                proveedores = proveedorRepository.findAll();
-            }
-            // Se realiza una lista con el dto para ocultar datos
-            List<ProveedorDto> proveedorDtos = proveedores.stream()
-                    .map(proveedor -> modelMapper.map(proveedor, ProveedorDto.class))
-                    .collect(Collectors.toList());
-            if (!proveedores.isEmpty()) {
-                return ResponseEntity.ok(proveedorDtos);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_VER + "proveedores!");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
+    public List<Proveedor> listarProveedores(String filtro) {
+
+        List<Proveedor> proveedores = (filtro != null && !filtro.isEmpty()
+                ? proveedorRepository.findByFilter(filtro)
+                : proveedorRepository.findAll());
+
+        if (proveedores.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "proveedores!");
         }
+
+        return proveedores;
     }
 
     @Override
-    public ResponseEntity<?> verProveedorPorId(Integer id) {
-        try {
-            Optional<Proveedor> proveedor = proveedorRepository.findById(id);
-            // Se realiza una opcion con el dto para ocultar datos
-            Optional<ProveedorDto> optionalProveedor = modelMapper.map(proveedor, new TypeToken<Optional<ProveedorDto>>() {
-            }.getType());
-            if (optionalProveedor.isPresent()) {
-                return ResponseEntity.ok(optionalProveedor);
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
+    public Optional<Proveedor> listarProveedorPorId(Integer id) {
+
+        Optional<Proveedor> proveedorId = proveedorRepository.findById(id);
+
+        if (proveedorId.isEmpty()) {
+            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id);
         }
+
+        return proveedorId;
     }
 
     @Override
-    public ResponseEntity<?> agregarProveedor(ProveedorDto proveedorDto) {
-        try {
-            boolean existeProveedor = proveedorRepository.existsByNumeroIdentificacion(proveedorDto.getNumeroIdentificacion());
-            if (!existeProveedor) {
-                Proveedor proveedor = modelMapper.map(proveedorDto, Proveedor.class);
-                // Validar si los números de identificación y teléfono contienen la cantidad correcta de caracteres
-                String identificacion = String.valueOf(proveedorDto.getNumeroIdentificacion());
-                String telefono = String.valueOf(proveedorDto.getTelefono());
-                if (identificacion.length() < 7 || identificacion.length() > 10) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("El número de documento debe contener entre 7 y 10 números!");
-                }
-                if (telefono.length() != 10) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("El télefono debe contener exactamente 10 números!");
-                }
-                // Verificar que existan los tipos de identificación y proveedores en la bd
-                TipoIdentificacion tipoIdentificacion = tipoIdentificacionRepository.findById(proveedorDto.getTipoIdentificacionId())
-                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Identificación no encontrado!"));
-                proveedor.setTipoIdentificacion(tipoIdentificacion);
-                TipoProveedor tipoProveedor = tipoProveedorRepository.findById(proveedorDto.getTipoProveedorId())
-                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Proveedor no encontrado!"));
-                proveedor.setTipoProveedor(tipoProveedor);
-                proveedor.setFechaCreacion(LocalDate.now());
-                proveedorRepository.save(proveedor);
-                return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(Message.MENSAJE_EXITOSO_GUARDADO + "un proveedor");
-            } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(String.format(Message.MENSAJE_ERROR_EXISTE, "el proveedor"));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
+    @Transactional
+    public Proveedor agregarProveedor(Proveedor proveedor) {
+
+        boolean existeRazonSocial = proveedorRepository.existeRazonSocial(proveedor.getRazonSocial());
+        boolean existeNumeroIdentificacion = proveedorRepository.existeNumeroIdentificacion(proveedor.getNumeroIdentificacion());
+
+        if (existeRazonSocial && existeNumeroIdentificacion) {
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "el proveedor");
+        } else if (existeRazonSocial) {
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "la razón social");
+        } else if (existeNumeroIdentificacion) {
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "el número de identificación");
         }
+
+        TipoIdentificacion tipoIdentificacion = tipoIdentificacionRepository.findById(proveedor.getTipoIdentificacion().getId())
+                .orElseThrow(() -> new NotFoundException("Tipo de Identificación no encontrado!"));
+        proveedor.setTipoIdentificacion(tipoIdentificacion);
+        TipoProveedor tipoProveedor = tipoProveedorRepository.findById(proveedor.getTipoProveedor().getId())
+                .orElseThrow(() -> new NotFoundException("Tipo de Proveedor no encontrado!"));
+
+        proveedor.setTipoIdentificacion(tipoIdentificacion);
+        proveedor.setTipoProveedor(tipoProveedor);
+        proveedor.setFechaCreacion(LocalDate.now());
+        proveedorRepository.save(proveedor);
+
+        if (proveedor.getId() == null) {
+            throw new PersistenceException(Message.MENSAJE_ERROR_NO_ID + "proveedor");
+        }
+
+        return proveedor;
     }
 
     @Override
-    public ResponseEntity<?> actualizarProveedor(Integer id, ProveedorDto proveedorDto) {
-        try {
-            boolean existeProveedor = proveedorRepository.existsByNumeroIdentificacion(proveedorDto.getNumeroIdentificacion());
-            Optional<Proveedor> proveedorOptional = proveedorRepository.findById(id);
-            if (proveedorOptional.isPresent()) {
-                Proveedor proveedor = proveedorOptional.get();
-                // Validaciones para actualizar con datos que no existen en la bd y poder actualizar otros campos
-                if (!proveedorDto.getNumeroIdentificacion().equals(proveedor.getNumeroIdentificacion()) && existeProveedor) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(String.format(Message.MENSAJE_ERROR_EXISTE, "este proveedor!"));
-                }
-                // Validar si los números de identificación y teléfono contienen la cantidad correcta de caracteres
-                String identificacion = String.valueOf(proveedorDto.getNumeroIdentificacion());
-                String telefono = String.valueOf(proveedorDto.getTelefono());
-                if (
-                        !proveedorDto.getNumeroIdentificacion().equals(proveedor.getNumeroIdentificacion()) &&
-                                identificacion.length() < 7 || identificacion.length() > 10
-                ) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("El número de documento debe contener entre 7 y 10 números!");
-                }
-                if (!proveedorDto.getTelefono().equals(proveedor.getTelefono()) && telefono.length() != 10) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("El télefono debe contener exactamente 10 números!");
-                }
-                // Verificar que exitan los tipos de identificación y proveedores en la bd
-                TipoIdentificacion tipoIdentificacion = tipoIdentificacionRepository.findById(proveedorDto.getTipoIdentificacionId())
-                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Identificación no encontrado"));
-                proveedor.setTipoIdentificacion(tipoIdentificacion);
-                TipoProveedor tipoProveedor = tipoProveedorRepository.findById(proveedorDto.getTipoProveedorId())
-                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Proveedor no encontrado"));
-                proveedor.setTipoProveedor(tipoProveedor);
-                proveedor.setNumeroIdentificacion(proveedorDto.getNumeroIdentificacion());
-                // Configurar ModelMapper para ignorar los campos que no deben cambiar
-                modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-                modelMapper.typeMap(ProveedorDto.class, Proveedor.class).addMappings(mapper -> {
-                    mapper.skip(Proveedor::setId);
-                    mapper.skip(Proveedor::setFechaCreacion);
-                });
-                // Aplicar la actualización
-                modelMapper.map(proveedorDto, proveedor);
-                proveedorRepository.save(proveedor);
-                return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ACTUALIZADO + "el proveedor");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
+    @Transactional
+    public Proveedor actualizarProveedor(Integer id, Proveedor proveedorDto) {
+
+//            boolean existeProveedor = proveedorRepository.existsByNumeroIdentificacion(proveedorDto.getNumeroIdentificacion());
+//            Optional<Proveedor> proveedorOptional = proveedorRepository.findById(id);
+//            if (proveedorOptional.isPresent()) {
+//                Proveedor proveedor = proveedorOptional.get();
+//                // Validaciones para actualizar con datos que no existen en la bd y poder actualizar otros campos
+//                if (!proveedorDto.getNumeroIdentificacion().equals(proveedor.getNumeroIdentificacion()) && existeProveedor) {
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                            .body(String.format(Message.MENSAJE_ERROR_EXISTE, "este proveedor!"));
+//                }
+//                // Validar si los números de identificación y teléfono contienen la cantidad correcta de caracteres
+//                String identificacion = String.valueOf(proveedorDto.getNumeroIdentificacion());
+//                String telefono = String.valueOf(proveedorDto.getTelefono());
+//                if (
+//                        !proveedorDto.getNumeroIdentificacion().equals(proveedor.getNumeroIdentificacion()) &&
+//                                identificacion.length() < 7 || identificacion.length() > 10
+//                ) {
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                            .body("El número de documento debe contener entre 7 y 10 números!");
+//                }
+//                if (!proveedorDto.getTelefono().equals(proveedor.getTelefono()) && telefono.length() != 10) {
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                            .body("El télefono debe contener exactamente 10 números!");
+//                }
+//                // Verificar que exitan los tipos de identificación y proveedores en la bd
+//                TipoIdentificacion tipoIdentificacion = tipoIdentificacionRepository.findById(proveedorDto.getTipoIdentificacionId())
+//                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Identificación no encontrado"));
+//                proveedor.setTipoIdentificacion(tipoIdentificacion);
+//                TipoProveedor tipoProveedor = tipoProveedorRepository.findById(proveedorDto.getTipoProveedorId())
+//                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Proveedor no encontrado"));
+//                proveedor.setTipoProveedor(tipoProveedor);
+//                proveedor.setNumeroIdentificacion(proveedorDto.getNumeroIdentificacion());
+//                // Configurar ModelMapper para ignorar los campos que no deben cambiar
+//                modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+//                modelMapper.typeMap(ProveedorDto.class, Proveedor.class).addMappings(mapper -> {
+//                    mapper.skip(Proveedor::setId);
+//                    mapper.skip(Proveedor::setFechaCreacion);
+//                });
+//                // Aplicar la actualización
+//                modelMapper.map(proveedorDto, proveedor);
+//                proveedorRepository.save(proveedor);
+//                return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ACTUALIZADO + "el proveedor");
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
+//            }
+
+        return null;
     }
 
     @Override
-    public ResponseEntity<?> eliminarProveedor(Integer id) {
-        try {
-            Optional<Proveedor> proveedorOptional = proveedorRepository.findById(id);
-            if (proveedorOptional.isPresent()) {
-                Proveedor proveedor = proveedorOptional.get();
-                proveedorRepository.delete(proveedor);
-                return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ELIMINADO + "este proveedor");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Message.MENSAJE_ERROR_SERVIDOR + e.getMessage());
-        }
+    @Transactional
+    public void eliminarProveedor(Integer id) {
+
+        Proveedor proveedor = proveedorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+
+        proveedorRepository.delete(proveedor);
     }
-}*/
+}

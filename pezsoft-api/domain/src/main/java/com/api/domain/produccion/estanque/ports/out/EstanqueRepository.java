@@ -13,5 +13,5 @@ public interface EstanqueRepository {
     Estanque save(Estanque estanque);
     void delete(Estanque estanque);
     boolean existeEstanque(String estanque);
-    boolean existenCoordenadas( String coordenadas);
+    boolean existenCoordenadas(String coordenadas);
 }

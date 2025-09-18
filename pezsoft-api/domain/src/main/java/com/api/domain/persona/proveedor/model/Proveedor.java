@@ -1,54 +1,30 @@
-/*
-package com.api.domain.proveedor.model;
+package com.api.domain.persona.proveedor.model;
 
-import com.api.domain.model.Base;
-import com.api.domain.tipoidentificacion.model.TipoIdentificacion;
-import com.api.domain.tipoproveedor.model.TipoProveedor;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.api.domain.persona.proveedor.tipoproveedor.model.TipoProveedor;
+import com.api.domain.persona.tipoidentificacion.model.TipoIdentificacion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Proveedor extends Base {
+public class Proveedor {
 
-    @Column(nullable = false)
-    private String nombre;
-    
-    @Column(nullable = false)
-    private String apellido;
-
-    @Column(nullable = false)
-    private Long telefono;
-
-    @Column(nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String direccion;
-
-    @Column(name = "razon_social", nullable = false)
+    private Integer id;
+    private LocalDate fechaCreacion;
     private String razonSocial;
-
-    @Column(name = "numero_identificacion", nullable = false)
-    private Long numeroIdentificacion;
-
-    // Relaciones
-    // Tipo de Proveedor
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
-    private TipoProveedor tipoProveedor;
-
-    // Tipo de Identificación
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    private String numeroIdentificacion;
+    private String nombre;
+    private String apellido;
+    private String celular;
+    private String telefono;
+    private String correo;
+    private String direccion;
     private TipoIdentificacion tipoIdentificacion;
-}*/
+    private TipoProveedor tipoProveedor;
+}

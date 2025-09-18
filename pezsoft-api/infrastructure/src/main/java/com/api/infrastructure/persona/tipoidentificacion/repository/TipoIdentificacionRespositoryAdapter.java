@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -16,12 +17,16 @@ public class TipoIdentificacionRespositoryAdapter implements TipoIdentificacionR
     private final TipoIdentificacionRepositoryJpa tipoIdentificacionRepositoryJpa;
     private final TipoIdentificacionMapper tipoIdentificacionMapper;
 
-
     @Override
-    public List<TipoIdentificacion> buscarTodos() {
+    public List<TipoIdentificacion> findAll() {
         return tipoIdentificacionRepositoryJpa.findAll()
                 .stream()
                 .map(tipoIdentificacionMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<TipoIdentificacion> findById(Integer id) {
+        return tipoIdentificacionRepositoryJpa.findById(id).map(tipoIdentificacionMapper::toDomain);
     }
 }
