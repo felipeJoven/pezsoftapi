@@ -16,7 +16,7 @@ public class ProveedorRequestDto {
     private String razonSocial;
 
     @NotBlank(message = "El número de identificación es obligatorio")
-    @Pattern(regexp = "\\d+", message = "El número de identificación solo puede contener números!")
+    @Pattern(regexp = "^[0-9-]+$", message = "El número de identificación no puede contener letras!")
     @Size(min = 6, max = 12, message = "El número de identificación debe tener entre 6 y 12 dígitos!")
     private String numeroIdentificacion;
 
@@ -31,12 +31,11 @@ public class ProveedorRequestDto {
     private String apellido;
 
     @NotBlank(message = "El celular es obligatorio!")
-    @Size(min = 10, max = 10, message = "El celular debe tener exactamente 10 dígitos")
     @Pattern(regexp = "3\\d{9}", message = "El celular debe empezar por 3!")
+    @Size(min = 10, max = 10, message = "El celular debe tener exactamente 10 dígitos")
     private String celular;
 
-    @Size(min = 10, max = 10, message = "El telefono debe tener exactamente 10 dígitos!")
-    @Pattern(regexp = "60\\d{8}", message = "El telefono debe empezar por 60!")
+    @Pattern(regexp = "^$|60\\\\d{8}", message = "El telefono debe empezar por 60!")
     private String telefono;
 
     @NotBlank(message = "El correo es obligatorio!")

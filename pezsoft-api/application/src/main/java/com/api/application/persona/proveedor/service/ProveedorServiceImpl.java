@@ -3,7 +3,7 @@ package com.api.application.persona.proveedor.service;
 import com.api.application.utils.Message;
 import com.api.domain.exception.ConflictException;
 import com.api.domain.exception.NotFoundException;
-import com.api.domain.exception.PersistenceException;
+import com.api.domain.exception.IdNotGeneratedException;
 import com.api.domain.persona.proveedor.model.Proveedor;
 import com.api.domain.persona.proveedor.ports.in.ProveedorService;
 import com.api.domain.persona.proveedor.ports.out.ProveedorRepository;
@@ -12,6 +12,7 @@ import com.api.domain.persona.proveedor.tipoproveedor.ports.out.TipoProveedorRep
 import com.api.domain.persona.tipoidentificacion.model.TipoIdentificacion;
 import com.api.domain.persona.tipoidentificacion.ports.out.TipoIdentificacionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,74 +70,57 @@ public class ProveedorServiceImpl implements ProveedorService {
         }
 
         TipoIdentificacion tipoIdentificacion = tipoIdentificacionRepository.findById(proveedor.getTipoIdentificacion().getId())
-                .orElseThrow(() -> new NotFoundException("Tipo de Identificación no encontrado!"));
-        proveedor.setTipoIdentificacion(tipoIdentificacion);
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, "tipo de identificación"));
+
         TipoProveedor tipoProveedor = tipoProveedorRepository.findById(proveedor.getTipoProveedor().getId())
-                .orElseThrow(() -> new NotFoundException("Tipo de Proveedor no encontrado!"));
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, "tipo de proveedor"));
 
         proveedor.setTipoIdentificacion(tipoIdentificacion);
         proveedor.setTipoProveedor(tipoProveedor);
         proveedor.setFechaCreacion(LocalDate.now());
-        proveedorRepository.save(proveedor);
 
-        if (proveedor.getId() == null) {
-            throw new PersistenceException(Message.MENSAJE_ERROR_NO_ID + "proveedor");
+        Proveedor guardarProveedor = proveedorRepository.save(proveedor);
+
+        if (guardarProveedor.getId() == null) {
+            throw new IdNotGeneratedException(Message.MENSAJE_ERROR_NO_ID + "proveedor");
         }
 
-        return proveedor;
+        return guardarProveedor;
     }
 
     @Override
     @Transactional
-    public Proveedor actualizarProveedor(Integer id, Proveedor proveedorDto) {
+    public Proveedor actualizarProveedor(Integer id, Proveedor proveedorNuevo) {
 
-//            boolean existeProveedor = proveedorRepository.existsByNumeroIdentificacion(proveedorDto.getNumeroIdentificacion());
-//            Optional<Proveedor> proveedorOptional = proveedorRepository.findById(id);
-//            if (proveedorOptional.isPresent()) {
-//                Proveedor proveedor = proveedorOptional.get();
-//                // Validaciones para actualizar con datos que no existen en la bd y poder actualizar otros campos
-//                if (!proveedorDto.getNumeroIdentificacion().equals(proveedor.getNumeroIdentificacion()) && existeProveedor) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                            .body(String.format(Message.MENSAJE_ERROR_EXISTE, "este proveedor!"));
-//                }
-//                // Validar si los números de identificación y teléfono contienen la cantidad correcta de caracteres
-//                String identificacion = String.valueOf(proveedorDto.getNumeroIdentificacion());
-//                String telefono = String.valueOf(proveedorDto.getTelefono());
-//                if (
-//                        !proveedorDto.getNumeroIdentificacion().equals(proveedor.getNumeroIdentificacion()) &&
-//                                identificacion.length() < 7 || identificacion.length() > 10
-//                ) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                            .body("El número de documento debe contener entre 7 y 10 números!");
-//                }
-//                if (!proveedorDto.getTelefono().equals(proveedor.getTelefono()) && telefono.length() != 10) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                            .body("El télefono debe contener exactamente 10 números!");
-//                }
-//                // Verificar que exitan los tipos de identificación y proveedores en la bd
-//                TipoIdentificacion tipoIdentificacion = tipoIdentificacionRepository.findById(proveedorDto.getTipoIdentificacionId())
-//                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Identificación no encontrado"));
-//                proveedor.setTipoIdentificacion(tipoIdentificacion);
-//                TipoProveedor tipoProveedor = tipoProveedorRepository.findById(proveedorDto.getTipoProveedorId())
-//                        .orElseThrow(() -> new EntityNotFoundException("Tipo de Proveedor no encontrado"));
-//                proveedor.setTipoProveedor(tipoProveedor);
-//                proveedor.setNumeroIdentificacion(proveedorDto.getNumeroIdentificacion());
-//                // Configurar ModelMapper para ignorar los campos que no deben cambiar
-//                modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-//                modelMapper.typeMap(ProveedorDto.class, Proveedor.class).addMappings(mapper -> {
-//                    mapper.skip(Proveedor::setId);
-//                    mapper.skip(Proveedor::setFechaCreacion);
-//                });
-//                // Aplicar la actualización
-//                modelMapper.map(proveedorDto, proveedor);
-//                proveedorRepository.save(proveedor);
-//                return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ACTUALIZADO + "el proveedor");
-//            } else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
-//            }
+        boolean existeRazonSocial = proveedorRepository.existeRazonSocial(proveedorNuevo.getRazonSocial());
+        boolean existeNumeroIdentificacion = proveedorRepository.existeNumeroIdentificacion(proveedorNuevo.getNumeroIdentificacion());
 
-        return null;
+        Proveedor proveedorActual = proveedorRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+
+        boolean cambioRazonSocial = !proveedorNuevo.getRazonSocial().equalsIgnoreCase(proveedorActual.getRazonSocial());
+        boolean cambioNumeroIdentificacion = !proveedorNuevo.getNumeroIdentificacion().equalsIgnoreCase(proveedorActual.getNumeroIdentificacion());
+
+        if (existeRazonSocial && cambioRazonSocial && existeNumeroIdentificacion && cambioNumeroIdentificacion) {
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "el proveedor");
+        } else if (cambioRazonSocial && existeRazonSocial) {
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "la razón social");
+        } else if (cambioNumeroIdentificacion && existeNumeroIdentificacion) {
+            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "el número de identificación");
+        }
+
+        TipoIdentificacion tipoIdentificacion = tipoIdentificacionRepository.findById(proveedorNuevo.getTipoIdentificacion().getId())
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, "tipo de identificación"));
+
+        TipoProveedor tipoProveedor = tipoProveedorRepository.findById(proveedorNuevo.getTipoProveedor().getId())
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, "tipo de proveedor"));
+
+        proveedorNuevo.setTipoIdentificacion(tipoIdentificacion);
+        proveedorNuevo.setTipoProveedor(tipoProveedor);
+
+        BeanUtils.copyProperties(proveedorNuevo, proveedorActual, "id", "fechaCreacion");
+
+        return proveedorRepository.save(proveedorActual);
     }
 
     @Override

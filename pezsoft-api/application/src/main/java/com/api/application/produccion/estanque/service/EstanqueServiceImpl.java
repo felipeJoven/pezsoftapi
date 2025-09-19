@@ -3,7 +3,7 @@ package com.api.application.produccion.estanque.service;
 import com.api.application.utils.Message;
 import com.api.domain.exception.ConflictException;
 import com.api.domain.exception.NotFoundException;
-import com.api.domain.exception.PersistenceException;
+import com.api.domain.exception.IdNotGeneratedException;
 import com.api.domain.produccion.estanque.model.Estanque;
 import com.api.domain.produccion.estanque.ports.in.EstanqueService;
 import com.api.domain.produccion.estanque.ports.out.EstanqueRepository;
@@ -76,7 +76,7 @@ public class EstanqueServiceImpl implements EstanqueService {
         Estanque guardarEstanque = estanqueRepository.save(estanque);
 
         if (guardarEstanque.getId() == null) {
-            throw new PersistenceException(Message.MENSAJE_ERROR_NO_ID + "estanque");
+            throw new IdNotGeneratedException(Message.MENSAJE_ERROR_NO_ID + "estanque");
         }
 
         return guardarEstanque;
@@ -84,34 +84,33 @@ public class EstanqueServiceImpl implements EstanqueService {
 
     @Override
     @Transactional
-    public Estanque actualizarEstanque(Integer id, Estanque estanque) {
+    public Estanque actualizarEstanque(Integer id, Estanque estanqueNuevo) {
 
-        Estanque actualizarEstanque = estanqueRepository.findById(id)
+        boolean existeEstanque = estanqueRepository.existeEstanque(estanqueNuevo.getEstanque());
+        boolean existeCoordenadas = estanqueRepository.existenCoordenadas(estanqueNuevo.getCoordenadas());
+
+        Estanque estanqueActual = estanqueRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
 
-        boolean existeEstanque = estanqueRepository.existeEstanque(estanque.getEstanque());
-        boolean existeCoordenadas = estanqueRepository.existenCoordenadas(estanque.getCoordenadas());
+        boolean cambioEstanque = !estanqueNuevo.getEstanque().equalsIgnoreCase(estanqueActual.getEstanque());
+        boolean cambioCoordenadas = !estanqueNuevo.getCoordenadas().equalsIgnoreCase(estanqueActual.getCoordenadas());
 
-        if (
-                existeEstanque && !estanque.getEstanque().equals(actualizarEstanque.getEstanque()) &&
-                        existeCoordenadas && !estanque.getCoordenadas().equals(actualizarEstanque.getCoordenadas())
-        ) {
+        if (existeEstanque && cambioEstanque && existeCoordenadas && cambioCoordenadas) {
             throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "el estanque y las coordenadas");
-        } else if (!estanque.getEstanque().equals(actualizarEstanque.getEstanque()) && existeEstanque) {
+        } else if (cambioEstanque && existeEstanque) {
             throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "este estanque");
-        } else if (!estanque.getCoordenadas().equals(actualizarEstanque.getCoordenadas()) && existeCoordenadas) {
+        } else if (cambioCoordenadas && existeCoordenadas) {
             throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "estas coordenadas");
         }
 
-        TipoEstanque tipoEstanque = tipoEstanqueRepository.findById(estanque.getTipoEstanque().getId())
-                        .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, "tipo de estanque"));
+        TipoEstanque tipoEstanque = tipoEstanqueRepository.findById(estanqueNuevo.getTipoEstanque().getId())
+                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_OBTENER_ENTIDAD, "tipo de estanque"));
 
-        estanque.setTipoEstanque(tipoEstanque);
+        estanqueNuevo.setTipoEstanque(tipoEstanque);
 
-        BeanUtils.copyProperties(estanque, actualizarEstanque, "id", "fechaCreacion", "estado");
-        estanqueRepository.save(actualizarEstanque);
+        BeanUtils.copyProperties(estanqueNuevo, estanqueActual, "id", "fechaCreacion", "estado");
 
-        return actualizarEstanque;
+        return estanqueRepository.save(estanqueActual);
     }
 
     @Override

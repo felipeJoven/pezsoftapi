@@ -20,7 +20,7 @@ public class EspecieEntity extends Base {
 
     @Column(nullable = false)
     @NotBlank(message = "El nombre de la especie es obligatorio!")
-    @Size(min = 2, max = 50, message = "El nombre de la especie debe tener entre 2 y 50 caracteres!")
+    @Size(min = 2, max = 30, message = "El nombre de la especie debe tener entre 2 y 30 caracteres!")
     @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúñÑ ]+$",
             message = "El nombre de la especie solo puede contener letras!")
     private String especie;

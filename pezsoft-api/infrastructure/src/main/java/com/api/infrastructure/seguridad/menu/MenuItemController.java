@@ -17,20 +17,20 @@ public class MenuItemController {
     public List<MenuItem> obtenerMenuAdmin() {
         return List.of(
                 new MenuItem("Usuario", "Integrantes", "/seguridad/usuario"),
-                new MenuItem("Catálogo", "Especie", "/catalogo/especie"),
-                new MenuItem("Persona", "Proveedor", "/persona/proveedor"),
-                new MenuItem("Producción", "Estanque", "/produccion/estanque"),
-                new MenuItem("Producción", "Lote", "/produccion/lote")
+                new MenuItem("Catálogo", "Especies", "/catalogo/especie"),
+                new MenuItem("Persona", "Proveedores", "/persona/proveedor"),
+                new MenuItem("Producción", "Estanques", "/produccion/estanque"),
+                new MenuItem("Producción", "Lotes", "/produccion/lote")
         );
     }
 
     @GetMapping("/usuario")
     public List<MenuItem> obtenerMenuUsuario() {
         return List.of(
-                new MenuItem("Catálogo", "Especie", "/catalogo/especie"),
-                new MenuItem("Persona", "Proveedor", "/persona/proveedor"),
-                new MenuItem("Producción", "Estanque", "/produccion/estanque"),
-                new MenuItem("Producción", "Lote", "/produccion/lote")
+                new MenuItem("Catálogo", "Especies", "/catalogo/especie"),
+                new MenuItem("Persona", "Proveedores", "/persona/proveedor"),
+                new MenuItem("Producción", "Estanques", "/produccion/estanque"),
+                new MenuItem("Producción", "Lotes", "/produccion/lote")
         );
     }
 }

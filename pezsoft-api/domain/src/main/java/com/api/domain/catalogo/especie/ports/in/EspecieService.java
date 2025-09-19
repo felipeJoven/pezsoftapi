@@ -10,6 +10,6 @@ public interface EspecieService {
     List<Especie> listarEspecies(String filtro);
     Optional<Especie> listarEspeciePorId(Integer id);
     Especie agregarEspecie(Especie especie);
-    Especie actualizarEspecie(Integer id, Especie especie);
+    Especie actualizarEspecie(Integer id, Especie especieNueva);
     void eliminarEspecie(Integer id);
 }

@@ -3,4 +3,5 @@ VALUES
     ('Concreto'),
     ('Geomembrana'),
     ('Tierra'),
+    ('Tanque de plástico'),
     ('Jaula flotante');

@@ -10,6 +10,6 @@ public interface ProveedorService {
     List<Proveedor> listarProveedores(String filtro);
     Optional<Proveedor> listarProveedorPorId(Integer id);
     Proveedor agregarProveedor(Proveedor proveedor);
-    Proveedor actualizarProveedor(Integer id, Proveedor proveedor);
+    Proveedor actualizarProveedor(Integer id, Proveedor proveedorNuevo);
     void eliminarProveedor(Integer id);
 }

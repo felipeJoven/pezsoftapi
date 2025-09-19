@@ -10,6 +10,6 @@ public interface EstanqueService {
     List<Estanque> listarEstanque(String filtro);
     Optional<Estanque> listarEstanquePorId(Integer id);
     Estanque agregarEstanque(Estanque estanque);
-    Estanque actualizarEstanque(Integer id, Estanque estanque);
+    Estanque actualizarEstanque(Integer id, Estanque estanqueNuevo);
     void eliminarEstanque(Integer id);
 }

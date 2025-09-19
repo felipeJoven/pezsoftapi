@@ -48,6 +48,7 @@ public class EspecieServiceImpl implements EspecieService {
     }
 
     @Override
+    @Transactional
     public Especie agregarEspecie(Especie especie) {
 
         boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
@@ -63,19 +64,21 @@ public class EspecieServiceImpl implements EspecieService {
 
     @Override
     @Transactional
-    public Especie actualizarEspecie(Integer id, Especie especie) {
+    public Especie actualizarEspecie(Integer id, Especie especieNueva) {
 
-        Especie especieActualizada = especieRepository.findById(id)
+        boolean existeEspecie = especieRepository.existsByEspecie(especieNueva.getEspecie());
+        
+        Especie especieActual = especieRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
 
-        boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
+        boolean cambioEspecie = !especieNueva.getEspecie().equalsIgnoreCase(especieActual.getEspecie());
 
-        if (!especie.getEspecie().equals(especieActualizada.getEspecie()) && existeEspecie) {
+        if (cambioEspecie && existeEspecie) {
             throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "esta especie");
         }
 
-        especieActualizada.setEspecie(especie.getEspecie());
-        return especieRepository.save(especieActualizada);
+        especieActual.setEspecie(especieNueva.getEspecie());
+        return especieRepository.save(especieActual);
     }
 
     @Override

@@ -2,7 +2,7 @@ CREATE TABLE proveedor (
     id INT IDENTITY PRIMARY KEY,
     fecha_creacion DATE NOT NULL DEFAULT CAST(GETDATE() AS DATE),
     razon_social VARCHAR(50) NOT NULL UNIQUE,
-    numero_identificacion VARCHAR(50) NOT NULL UNIQUE,
+    numero_identificacion VARCHAR(12) NOT NULL UNIQUE,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
     celular VARCHAR(10) NOT NULL,

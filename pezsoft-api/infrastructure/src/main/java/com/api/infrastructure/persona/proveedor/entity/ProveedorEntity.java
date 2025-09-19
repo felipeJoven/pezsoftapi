@@ -34,7 +34,6 @@ public class ProveedorEntity extends Base {
     @Column(nullable = false)
     private String celular;
 
-    @Column(nullable = false)
     private String telefono;
 
     @Column(nullable = false)

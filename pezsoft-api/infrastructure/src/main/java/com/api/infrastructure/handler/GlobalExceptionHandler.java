@@ -3,7 +3,7 @@ package com.api.infrastructure.handler;
 import com.api.domain.exception.BadRequestException;
 import com.api.domain.exception.ConflictException;
 import com.api.domain.exception.NotFoundException;
-import com.api.domain.exception.PersistenceException;
+import com.api.domain.exception.IdNotGeneratedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -54,9 +54,9 @@ public class GlobalExceptionHandler {
         return buildResponse(errores, HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler(PersistenceException.class)
-    public ResponseEntity<?> handlePersistence(PersistenceException e, WebRequest request) {
-        log.error("Error de persistencia: ", e);
+    @ExceptionHandler(IdNotGeneratedException.class)
+    public ResponseEntity<?> handlePersistence(IdNotGeneratedException e, WebRequest request) {
+        log.error("Id no generado: ", e);
         return buildResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 

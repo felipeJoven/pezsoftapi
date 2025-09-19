@@ -5,6 +5,7 @@ import com.api.application.persona.proveedor.dto.ProveedorResponseDto;
 import com.api.domain.persona.proveedor.model.Proveedor;
 import com.api.domain.persona.proveedor.ports.in.ProveedorService;
 import com.api.infrastructure.persona.proveedor.mapper.ProveedorMapper;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class ProveedorController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> crearProveedor(@RequestBody ProveedorRequestDto requestDto) {
+    public ResponseEntity<?> crearProveedor(@Valid @RequestBody ProveedorRequestDto requestDto) {
 
         Proveedor proveedor = proveedorMapper.requestToDomain(requestDto);
         Proveedor proveedorNuevo = proveedorService.agregarProveedor(proveedor);
@@ -51,7 +52,7 @@ public class ProveedorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editarProveedor(@PathVariable Integer id, @RequestBody ProveedorRequestDto requestDto) {
+    public ResponseEntity<?> editarProveedor(@PathVariable Integer id, @Valid @RequestBody ProveedorRequestDto requestDto) {
 
         Proveedor proveedor = proveedorMapper.requestToDomain(requestDto);
         Proveedor proveedorActualizado = proveedorService.actualizarProveedor(id, proveedor);
