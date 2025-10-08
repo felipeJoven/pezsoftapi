@@ -12,13 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("proveedor")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class ProveedorController {
 
     private final ProveedorService proveedorService;
@@ -29,7 +29,12 @@ public class ProveedorController {
 
         List<Proveedor> proveedores = proveedorService.listarProveedores(filtro);
 
-        return ResponseEntity.ok(proveedores);
+        List<ProveedorResponseDto> responseDto = proveedores
+                .stream()
+                .map(proveedorMapper::domainToResponse)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{id}")
@@ -37,7 +42,9 @@ public class ProveedorController {
 
         Optional<Proveedor> proveedorId = proveedorService.listarProveedorPorId(id);
 
-        return ResponseEntity.ok(proveedorId);
+        Optional<ProveedorResponseDto> responseDto = proveedorId.map(proveedorMapper::domainToResponse);
+
+        return ResponseEntity.ok(responseDto);
     }
 
     @PostMapping("")

@@ -27,16 +27,16 @@ public class EspecieRepositoryAdapter implements EspecieRepository {
     }
 
     @Override
-    public Optional<Especie> findById(Integer id) {
-        return especieRepositoryJpa.findById(id).map(especieMapper::toDomain);
-    }
-
-    @Override
     public List<Especie> findByFilter(String filtro) {
         return especieRepositoryJpa.findByEspecie(filtro)
                 .stream()
                 .map(especieMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Especie> findById(Integer id) {
+        return especieRepositoryJpa.findById(id).map(especieMapper::toDomain);
     }
 
     @Override

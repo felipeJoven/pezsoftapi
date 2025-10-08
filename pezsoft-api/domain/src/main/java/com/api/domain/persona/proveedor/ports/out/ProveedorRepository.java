@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface ProveedorRepository {
 
     List<Proveedor> findAll();
-    Optional<Proveedor> findById(Integer id);
     List<Proveedor> findByFilter(String filtro);
+    Optional<Proveedor> findById(Integer id);
     Proveedor save(Proveedor proveedor);
     void delete(Proveedor proveedor);
     boolean existeRazonSocial(String razonSocial);

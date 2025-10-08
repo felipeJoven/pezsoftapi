@@ -1,8 +1,7 @@
 package com.api.application.seguridad.usuario.service;
 
 import com.api.application.seguridad.usuario.dto.UsuarioDto;
-import com.api.application.utils.Message;
-import com.api.domain.exception.BadRequestException;
+import com.api.application.utils.MessageUtils;
 import com.api.domain.exception.NotFoundException;
 import com.api.domain.seguridad.usuario.model.Usuario;
 import com.api.domain.seguridad.usuario.ports.in.UsuarioService;
@@ -38,7 +37,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         List<Usuario> usuarios = usuarioRepository.findAll();
 
         if (usuarios.isEmpty()) {
-            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "usuarios!");
+            throw new NotFoundException(MessageUtils.NO_ENCONTRADO + "usuarios!");
         }
 
         return usuarios;
@@ -50,7 +49,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Optional<Usuario> usuarioId = usuarioRepository.findById(id);
 
         if (usuarioId.isEmpty()) {
-            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id);
+            throw new NotFoundException(MessageUtils.ID_NO_ENCONTRADO + id);
         }
 
         return usuarioId;
@@ -111,7 +110,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario actualizarUsuario(Integer id, Usuario usuario) {
 
         Usuario usuarioActualizado = usuarioRepository.findById(id).
-                orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+                orElseThrow(() -> new NotFoundException(MessageUtils.ID_NO_ENCONTRADO + id));
 
         UsuarioDto usuarioDto = new UsuarioDto();
 
@@ -156,7 +155,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void eliminarUsuario(Integer id) {
 
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+                .orElseThrow(() -> new NotFoundException(MessageUtils.ID_NO_ENCONTRADO + id));
 
         usuarioRepository.delete(usuario);
     }

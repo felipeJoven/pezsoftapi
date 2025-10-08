@@ -1,54 +1,33 @@
-/*
-package com.api.domain.lote.model;
+package com.api.domain.produccion.lote.model;
 
-import com.api.domain.model.Base;
-import com.api.domain.proveedor.model.Proveedor;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Transient;
+import com.api.domain.catalogo.especie.model.Especie;
+import com.api.domain.persona.proveedor.model.Proveedor;
+import com.api.domain.produccion.estanque.model.Estanque;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Lote extends Base {
-    
-    @Column(nullable = false)
+public class Lote {
+
+    private Integer id;
+    private LocalDate fechaCreacion;
     private String lote;
-
-    @Column(name = "numero_peces", nullable = false)
-    private int  numeroPeces;
-
-    @Column(name = "fecha_siembra", nullable = false)
     private LocalDate fechaSiembra;
-
-    @Column(name = "peces_iniciales")
     private int pecesIniciales;
-
-    @Transient
-    private Long diasCultivados;
-
-    // Especies
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    private int  numeroPeces;
     private Especie especie;
-
-    // Unidad productiva
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    private Proveedor proveedor;
     private Estanque estanque;
 
-    // Proveedor
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
-    private Proveedor proveedor;
-}*/
+    public Long getDiasCultivados() {
+        return ChronoUnit.DAYS.between(fechaSiembra, LocalDate.now());
+    }
+}

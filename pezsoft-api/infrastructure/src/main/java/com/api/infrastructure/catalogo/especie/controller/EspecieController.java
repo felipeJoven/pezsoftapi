@@ -2,6 +2,7 @@ package com.api.infrastructure.catalogo.especie.controller;
 
 import com.api.domain.catalogo.especie.model.Especie;
 import com.api.domain.catalogo.especie.ports.in.EspecieService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,13 @@ public class EspecieController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> crearEspecie(@RequestBody Especie especie) {
+    public ResponseEntity<?> crearEspecie(@Valid @RequestBody Especie especie) {
         Especie nuevaEspecie = especieService.agregarEspecie(especie);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaEspecie);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editarEspecie(@PathVariable Integer id, @RequestBody Especie especie) {
+    public ResponseEntity<?> editarEspecie(@PathVariable Integer id, @Valid @RequestBody Especie especie) {
         Especie especieActualizada = especieService.actualizarEspecie(id, especie);
         return ResponseEntity.ok(especieActualizada);
     }

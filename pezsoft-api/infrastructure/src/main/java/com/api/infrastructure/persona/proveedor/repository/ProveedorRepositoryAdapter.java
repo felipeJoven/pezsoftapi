@@ -27,16 +27,16 @@ public class ProveedorRepositoryAdapter implements ProveedorRepository {
     }
 
     @Override
-    public Optional<Proveedor> findById(Integer id) {
-        return proveedorRepositoryJpa.findById(id).map(proveedorMapper::toDomain);
-    }
-
-    @Override
     public List<Proveedor> findByFilter(String filtro) {
         return proveedorRepositoryJpa.findByRazonSocialAndNumeroIdentificacion(filtro)
                 .stream()
                 .map(proveedorMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Proveedor> findById(Integer id) {
+        return proveedorRepositoryJpa.findById(id).map(proveedorMapper::toDomain);
     }
 
     @Override

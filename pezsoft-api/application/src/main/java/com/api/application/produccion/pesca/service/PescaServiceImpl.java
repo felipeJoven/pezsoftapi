@@ -66,7 +66,7 @@ public class PescaServiceImpl implements PescaService {
                 return ResponseEntity.ok(optionalPesca);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
+                        .body(Message.ID_NO_ENCONTRADO + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -172,7 +172,7 @@ public class PescaServiceImpl implements PescaService {
                 return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ACTUALIZADO + "la pesca");
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
+                        .body(Message.ID_NO_ENCONTRADO + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -199,7 +199,7 @@ public class PescaServiceImpl implements PescaService {
                 return ResponseEntity.ok(Message.MENSAJE_EXITOSO_ELIMINADO + "esta pesca");
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Message.MENSAJE_ERROR_LISTAR_ID + id);
+                        .body(Message.ID_NO_ENCONTRADO + id);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -1,22 +1,19 @@
-/*
-package com.api.infrastructure.lote.repository;
+package com.api.infrastructure.produccion.lote.repository;
 
-import com.api.domain.lote.model.Lote;
 import com.api.infrastructure.base.repository.BaseRespositoryJpa;
+import com.api.infrastructure.produccion.lote.entity.LoteEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface LoteRepositoryJpa extends BaseRespositoryJpa<Lote, Integer> {
+public interface LoteRepositoryJpa extends BaseRespositoryJpa<LoteEntity, Integer> {
 
-    Boolean existsByLote(String lote);
-
-    // Encontrar una lista de lotes por nombre y fecha de siembra
-    @Query("SELECT l FROM Lote l WHERE " +
+    @Query("SELECT l FROM lote l WHERE " +
             "LOWER(l.lote) LIKE LOWER(CONCAT('%', :filtro, '%')) OR " +
             "CAST(l.fechaSiembra AS string) LIKE LOWER(CONCAT('%', :filtro, '%'))")
-    List<Lote> findByLoteAndFechaSiembra(String filtro);
+    List<LoteEntity> findByLoteAndFechaSiembra(String filtro);
+
+    boolean existsByLote(String lote);
 }
-*/

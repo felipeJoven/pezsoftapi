@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface EspecieRepository {
 
     List<Especie> findAll();
-    Optional<Especie> findById(Integer id);
     List<Especie> findByFilter(String filtro);
+    Optional<Especie> findById(Integer id);
     Especie save(Especie especie);
     void delete(Especie especie);
     boolean existsByEspecie(String especie);

@@ -3,11 +3,13 @@ package com.api.application.catalogo.especie.service;
 import com.api.domain.catalogo.especie.model.Especie;
 import com.api.domain.catalogo.especie.ports.in.EspecieService;
 import com.api.domain.catalogo.especie.ports.out.EspecieRepository;
-import com.api.application.utils.Message;
-import com.api.domain.exception.BadRequestException;
+import com.api.application.utils.MessageUtils;
 import com.api.domain.exception.ConflictException;
 import com.api.domain.exception.NotFoundException;
+import com.api.domain.utils.FiltroUtils;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,17 +21,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EspecieServiceImpl implements EspecieService {
 
+    private static final Logger logger = LoggerFactory.getLogger(EspecieServiceImpl.class);
     private final EspecieRepository especieRepository;
 
     @Override
     public List<Especie> listarEspecies(String filtro) {
 
-        List<Especie> especies = (filtro != null && !filtro.isEmpty())
-                ? especieRepository.findByFilter(filtro)
-                : especieRepository.findAll();
+        List<Especie> especies;
 
-        if (especies.isEmpty()) {
-            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR + "especies!");
+        if (FiltroUtils.esFiltroValido(filtro)) {
+            especies = especieRepository.findByFilter(filtro);
+            logger.info("Especies filtradas: {}", especies.size());
+
+            if (especies.isEmpty()) {
+                logger.warn(MessageUtils.NO_ENCONTRADO + "especies con filtro: {}", filtro);
+                throw new NotFoundException(MessageUtils.NO_ENCONTRADO + "especies!");
+            }
+        } else {
+            especies = especieRepository.findAll();
+
+            if (especies.isEmpty()) {
+                logger.warn(MessageUtils.NO_EXISTE, "especies");
+            } else {
+                logger.info("Especies encontradas: {}", especies.size());
+            }
         }
 
         return especies;
@@ -41,7 +56,7 @@ public class EspecieServiceImpl implements EspecieService {
         Optional<Especie> especieId = especieRepository.findById(id);
 
         if (especieId.isEmpty()) {
-            throw new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id);
+            throw new NotFoundException(MessageUtils.ID_NO_ENCONTRADO + id);
         }
 
         return especieId;
@@ -54,7 +69,7 @@ public class EspecieServiceImpl implements EspecieService {
         boolean existeEspecie = especieRepository.existsByEspecie(especie.getEspecie());
 
         if (existeEspecie) {
-            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "la especie");
+            throw new ConflictException(MessageUtils.YA_EXISTE, "la especie");
         }
 
         especie.setFechaCreacion(LocalDate.now());
@@ -67,14 +82,14 @@ public class EspecieServiceImpl implements EspecieService {
     public Especie actualizarEspecie(Integer id, Especie especieNueva) {
 
         boolean existeEspecie = especieRepository.existsByEspecie(especieNueva.getEspecie());
-        
+
         Especie especieActual = especieRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+                .orElseThrow(() -> new NotFoundException(MessageUtils.ID_NO_ENCONTRADO + id));
 
         boolean cambioEspecie = !especieNueva.getEspecie().equalsIgnoreCase(especieActual.getEspecie());
 
         if (cambioEspecie && existeEspecie) {
-            throw new ConflictException(Message.MENSAJE_ERROR_EXISTE, "esta especie");
+            throw new ConflictException(MessageUtils.YA_EXISTE, "esta especie");
         }
 
         especieActual.setEspecie(especieNueva.getEspecie());
@@ -86,7 +101,7 @@ public class EspecieServiceImpl implements EspecieService {
     public void eliminarEspecie(Integer id) {
 
         Especie especie = especieRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(Message.MENSAJE_ERROR_LISTAR_ID + id));
+                .orElseThrow(() -> new NotFoundException(MessageUtils.ID_NO_ENCONTRADO + id));
 
         especieRepository.delete(especie);
     }

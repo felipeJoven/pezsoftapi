@@ -6,7 +6,7 @@ import com.api.domain.produccion.estanque.model.Estanque;
 import com.api.domain.produccion.estanque.ports.in.EstanqueService;
 import com.api.infrastructure.produccion.estanque.mapper.EstanqueMapper;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,20 +16,21 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("estanque")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class EstanqueController {
 
-    private EstanqueService estanqueService;
-    private EstanqueMapper estanqueMapper;
+    private final EstanqueService estanqueService;
+    private final EstanqueMapper estanqueMapper;
 
     @GetMapping("")
     public ResponseEntity<?> obtenerEstanques(@RequestParam(required = false) String filtro) {
 
         List<Estanque> estanques = estanqueService.listarEstanque(filtro);
 
-        List<EstanqueResponseDto> responseDto = estanques.stream()
+        List<EstanqueResponseDto> responseDto = estanques
+                .stream()
                 .map(estanqueMapper::domainToResponse)
                 .collect(Collectors.toList());
 
@@ -41,8 +42,7 @@ public class EstanqueController {
 
         Optional<Estanque> estanqueId = estanqueService.listarEstanquePorId(id);
 
-        Optional<EstanqueResponseDto> responseDto = estanqueId
-                .map(estanqueMapper::domainToResponse);
+        Optional<EstanqueResponseDto> responseDto = estanqueId.map(estanqueMapper::domainToResponse);
 
         return ResponseEntity.ok(responseDto);
     }

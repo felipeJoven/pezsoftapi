@@ -10,7 +10,7 @@ public class ProveedorResponseDto {
     private Integer id;
     private LocalDate fechaCreacion;
     private String razonSocial;
-    private Long numeroIdentificacion;
+    private String numeroIdentificacion;
     private String nombre;
     private String apellido;
     private String celular;

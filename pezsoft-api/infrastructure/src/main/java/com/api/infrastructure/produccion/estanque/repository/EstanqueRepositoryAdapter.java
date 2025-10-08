@@ -27,16 +27,16 @@ public class EstanqueRepositoryAdapter implements EstanqueRepository {
     }
 
     @Override
-    public Optional<Estanque> findById(Integer id) {
-        return estanqueRepositoryJpa.findById(id).map(estanqueMapper::toDomain);
-    }
-
-    @Override
     public List<Estanque> findByFilter(String filtro) {
         return estanqueRepositoryJpa.findByEstanqueAndCoordenadas(filtro)
                 .stream()
                 .map(estanqueMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Estanque> findById(Integer id) {
+        return estanqueRepositoryJpa.findById(id).map(estanqueMapper::toDomain);
     }
 
     @Override

@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface EstanqueRepository {
 
     List<Estanque> findAll();
-    Optional<Estanque> findById(Integer id);
     List<Estanque> findByFilter(String filtro);
+    Optional<Estanque> findById(Integer id);
     Estanque save(Estanque estanque);
     void delete(Estanque estanque);
     boolean existeEstanque(String estanque);
